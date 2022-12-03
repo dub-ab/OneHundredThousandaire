@@ -9,7 +9,7 @@ Tasks are started by clicking the circle icon.  Watch the progress of the task w
 
 Each task has three options:
 
-  - You can buy more task value so that each time the task completes, you gain a greater return.  
+  - You can buy more task value so that each time the task completes, you gain the new value. 
     (Tip: Use the mouse wheel to quickly "scroll" through large purchases)
   - You can buy a task automation manager.  The manager will automatically start each task without you having to click the circle icon.
   - You can buy a task speed multiplier.  Each purchase will increase the task speed by 10%. 
