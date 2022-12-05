@@ -194,7 +194,7 @@ class Action():
         pygame.draw.rect(self.game.screen, color, [70, y_coord - 20, length, 40])
         
         value_text = self.game.font.render("{:.2f}".format(value), True, value_text_color)
-        self.game.screen.blit(value_text, (10, y_coord - 6))
+        self.game.screen.blit(value_text, (11, y_coord - 6))
 
         return self.task, length, draw
 
@@ -653,24 +653,24 @@ class Leaderboard():
         self.game.screen.blit(self.screen_leaderboard, (0, 0))
         if self.hs:
             self.hs_0_name   = self.tablecell(self.hs[0][0],                            ( 18, 290))
-            self.hs_0_spent  = self.tablecell("${:,.2f}".format(float(self.hs[0][2])),  (180, 290))
-            self.hs_0_time   = self.tablecell(self.calculate_mins_secs(self.hs[0][1]),  (345, 290))
+            self.hs_0_spent  = self.tablecell("${:,.2f}".format(float(self.hs[0][1])),  (180, 290))
+            self.hs_0_time   = self.tablecell(self.calculate_mins_secs(self.hs[0][2]),  (345, 290))
 
             self.hs_1_name   = self.tablecell(self.hs[1][0],                            ( 18, 310))
-            self.hs_1_spent  = self.tablecell("${:,.2f}".format(float(self.hs[1][2])),  (180, 310))
-            self.hs_1_time   = self.tablecell(self.calculate_mins_secs(self.hs[1][1]),  (345, 310))
+            self.hs_1_spent  = self.tablecell("${:,.2f}".format(float(self.hs[1][1])),  (180, 310))
+            self.hs_1_time   = self.tablecell(self.calculate_mins_secs(self.hs[1][2]),  (345, 310))
 
             self.hs_2_name   = self.tablecell(self.hs[2][0],                            ( 18, 330))
-            self.hs_2_spent  = self.tablecell("${:,.2f}".format(float(self.hs[2][2])),  (180, 330))
-            self.hs_2_time   = self.tablecell(self.calculate_mins_secs(self.hs[2][1]),  (345, 330))
+            self.hs_2_spent  = self.tablecell("${:,.2f}".format(float(self.hs[2][1])),  (180, 330))
+            self.hs_2_time   = self.tablecell(self.calculate_mins_secs(self.hs[2][2]),  (345, 330))
 
             self.hs_3_name   = self.tablecell(self.hs[3][0],                            ( 18, 350))
-            self.hs_3_spent  = self.tablecell("${:,.2f}".format(float(self.hs[3][2])),  (180, 350))
-            self.hs_3_time   = self.tablecell(self.calculate_mins_secs(self.hs[3][1]),  (345, 350))
+            self.hs_3_spent  = self.tablecell("${:,.2f}".format(float(self.hs[3][1])),  (180, 350))
+            self.hs_3_time   = self.tablecell(self.calculate_mins_secs(self.hs[3][2]),  (345, 350))
 
             self.hs_4_name   = self.tablecell(self.hs[4][0],                            ( 18, 370))
-            self.hs_4_spent  = self.tablecell("${:,.2f}".format(float(self.hs[4][2])),  (180, 370))
-            self.hs_4_time   = self.tablecell(self.calculate_mins_secs(self.hs[4][1]),  (345, 370))
+            self.hs_4_spent  = self.tablecell("${:,.2f}".format(float(self.hs[4][1])),  (180, 370))
+            self.hs_4_time   = self.tablecell(self.calculate_mins_secs(self.hs[4][2]),  (345, 370))
 
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [int(WIDTH * 0.25)-50, 550, 100, 40])
         self.continue_text = self.game.font.render("Continue", True, black)
@@ -802,43 +802,43 @@ class Over():
             self.game.is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.continue_button.collidepoint(event.pos):
-                # reset game variables
-                self.game.score =  0
-                self.game.total_spent = 0
-                self.game.clock_secs = 0
-                self.game.clock_mins = 0
-                self.game.clicked_red_task = 0
-                self.game.clicked_orange_task    = 0
-                self.game.clicked_yellow_task    = 0
-                self.game.clicked_green_task     = 0
-                self.game.clicked_blue_task      = 0
-                self.game.clicked_gray_task      = 0
-                self.game.clicked_violet_task    = 0
-                self.game.clicked_more_red     = 0
-                self.game.clicked_more_orange  = 0
-                self.game.clicked_more_yellow  = 0
-                self.game.clicked_more_green   = 0
-                self.game.clicked_more_blue   = 0
-                self.game.clicked_more_gray    = 0
-                self.game.clicked_more_violet  = 0
-                self.game.clicked_red_manager = 0
-                self.game.clicked_orange_manager = 0
-                self.game.clicked_yellow_manager = 0
-                self.game.clicked_green_manager = 0
-                self.game.clicked_blue_manager = 0
-                self.game.clicked_gray_manager = 0
-                self.game.clicked_violet_manager = 0
-                self.game.clicked_red_speed = 0
-                self.game.clicked_orange_speed = 0
-                self.game.clicked_yellow_speed = 0
-                self.game.clicked_green_speed = 0
-                self.game.clicked_blue_speed = 0
-                self.game.clicked_gray_speed = 0
-                self.game.clicked_violet_speed = 0
-            if self.game.eligible_to_save:
-                self.game.game_state = 'save'
-            else:
-                self.game.game_state = 'action'
+                if self.game.eligible_to_save:
+                    self.game.game_state = 'save'
+                else:
+                    self.game.game_state = 'action'
+                # # reset game variables
+                # self.game.score =  0
+                # self.game.total_spent = 0
+                # self.game.clock_secs = 0
+                # self.game.clock_mins = 0
+                # self.game.clicked_red_task = 0
+                # self.game.clicked_orange_task    = 0
+                # self.game.clicked_yellow_task    = 0
+                # self.game.clicked_green_task     = 0
+                # self.game.clicked_blue_task      = 0
+                # self.game.clicked_gray_task      = 0
+                # self.game.clicked_violet_task    = 0
+                # self.game.clicked_more_red     = 0
+                # self.game.clicked_more_orange  = 0
+                # self.game.clicked_more_yellow  = 0
+                # self.game.clicked_more_green   = 0
+                # self.game.clicked_more_blue   = 0
+                # self.game.clicked_more_gray    = 0
+                # self.game.clicked_more_violet  = 0
+                # self.game.clicked_red_manager = 0
+                # self.game.clicked_orange_manager = 0
+                # self.game.clicked_yellow_manager = 0
+                # self.game.clicked_green_manager = 0
+                # self.game.clicked_blue_manager = 0
+                # self.game.clicked_gray_manager = 0
+                # self.game.clicked_violet_manager = 0
+                # self.game.clicked_red_speed = 0
+                # self.game.clicked_orange_speed = 0
+                # self.game.clicked_yellow_speed = 0
+                # self.game.clicked_green_speed = 0
+                # self.game.clicked_blue_speed = 0
+                # self.game.clicked_gray_speed = 0
+                # self.game.clicked_violet_speed = 0
             # if self.exit_button.collidepoint(event.pos):
             #     self.game.is_running = False
     
@@ -937,6 +937,8 @@ class Game():
         # dev_pos_x = MONITOR_WIDTH - WIDTH 
         # dev_pos_y = 133 
         # os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (dev_pos_x,dev_pos_y)
+        game_icon = pygame.image.load('img_gold_pile.png')
+        pygame.display.set_icon(game_icon)
         self.screen = pygame.display.set_mode((self.width, self.height))   
         pygame.display.set_caption("One Hundred Thousandaire")
         self.fps = 60
@@ -955,7 +957,7 @@ class Game():
         self.game_state = 'splash'
         self.action_starting = True
         self.eligible_to_save = False        
-        self.score = 0    #    99999    #      10000  #       80000     #  
+        self.score =  0    #  80000     #    99999    #      10000  #      
         self.total_spent = 0
         self.clock_secs = 0
         self.clock_mins = 0
