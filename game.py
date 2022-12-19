@@ -7,31 +7,29 @@ This application was inspired by:
 __author__      = "Anthony B. Washington"
 __license__     = 'MIT'  # https://mit-license.org/
 
-import json
 import datetime
+import json
 import os
 import sys
 import time
 
 import matplotlib
+
 matplotlib.use("Agg")
 
 import matplotlib.backends.backend_agg as agg
-
 import matplotlib.pyplot as plt
-import pylab
+import matplotlib.figure
 
 import numpy as np
-from matplotlib.axis import Axis
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-
 import pygame
+# from matplotlib.axis import Axis
+
 BUFFER = 200
 MONITOR_WIDTH = 1920 - BUFFER
-WIDTH = 415
+WIDTH = 420
 HEIGHT = 620
-FPS = 120
+FPS = 60
 
 # colors
 red     = (255, 000, 000)
@@ -72,6 +70,7 @@ class Splash():
             if self.start_now_button.collidepoint(event.pos):
                 self.game.game_state = 'action'
             if self.leaderboard_button.collidepoint(event.pos):
+                self.game.leaderboard = Leaderboard(self.game)
                 self.game.game_state = 'leaderboard'
 
     def on_update(self):
@@ -247,12 +246,32 @@ class Action():
         speed_text = self.game.font.render(f'{speed_multiplier/1000}K', True, black)
         self.game.screen.blit(speed_text, (x_coord + 2, 582))
         return color_button, manager_button, speed_button    
-    
-    def build_stats(self, action):
+     
+    def build_tasks(self, action):
         """The method to make and return a dictionary of 'stats. 
         """
-        record_time = pygame.time.get_ticks()
-        record_score = self.game.score 
+        now = pygame.time.get_ticks()
+        if now >= self.game.elapsed_milliseconds:
+            self.game.elapsed_milliseconds = now
+
+        record_time = self.game.elapsed_milliseconds
+        record_score = self.game.score         
+        
+        c, a = action.split("_")
+        if c == 'red':
+            pass
+        if c == 'orange':
+            pass
+        if c == 'yellow':
+            pass
+        if c == 'green':
+            pass
+        if c == 'blue':
+            pass
+        if c == 'gray':
+            pass
+        if c == 'violet':
+            pass        
 
         return {'ticks': record_time, 'score': record_score, 'action': action}
 
@@ -264,48 +283,47 @@ class Action():
         """
         if event.type == pygame.QUIT:
             self.game.is_running = False
-        if event.type == pygame.MOUSEBUTTONDOWN: # and pygame.time.get_ticks() - self.last_mouse_click >= 1000:
-            #self.last_mouse_click = pygame.time.get_ticks()
+        if event.type == pygame.MOUSEBUTTONDOWN: 
             if self.task1.collidepoint(event.pos) and self.drawing_red == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 #self.game.stats['task_red'] = True
-                self.game.stats_list.append(self.build_stats('red_task'))
+                self.game.task_list.append(self.build_tasks('red_task'))
                 self.game.clicked_red_task += 1
                 self.drawing_red = True
             if self.task2.collidepoint(event.pos) and self.drawing_orange == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                self.game.stats_list.append(self.build_stats('orange_task'))
+                self.game.task_list.append(self.build_tasks('orange_task'))
                 self.game.clicked_orange_task += 1
                 self.drawing_orange = True
             if self.task3.collidepoint(event.pos) and self.drawing_yellow == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                self.game.stats_list.append(self.build_stats('yellow_task'))
+                self.game.task_list.append(self.build_tasks('yellow_task'))
                 self.game.clicked_yellow_task += 1
                 self.drawing_yellow = True
             if self.task4.collidepoint(event.pos) and self.drawing_green == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                self.game.stats_list.append(self.build_stats('green_task'))
+                self.game.task_list.append(self.build_tasks('green_task'))
                 self.game.clicked_green_task += 1
                 self.drawing_green = True
             if self.task5.collidepoint(event.pos) and self.drawing_blue == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                self.game.stats_list.append(self.build_stats('blue_task'))
+                self.game.task_list.append(self.build_tasks('blue_task'))
                 self.game.clicked_blue_task += 1
                 self.drawing_blue = True
             if self.task6.collidepoint(event.pos) and self.drawing_gray == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                self.game.stats_list.append(self.build_stats('gray_task'))
+                self.game.task_list.append(self.build_tasks('gray_task'))
                 self.game.clicked_gray_task += 1
                 self.drawing_gray = True
             if self.task7.collidepoint(event.pos) and self.drawing_violet == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                self.game.stats_list.append(self.build_stats('violet_task'))
+                self.game.task_list.append(self.build_tasks('violet_task'))
                 self.game.clicked_violet_task += 1
                 self.drawing_violet = True
 
             if self.red_buy_value.collidepoint(event.pos) and self.game.score >= self.red_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('red_more'))
+                self.game.task_list.append(self.build_tasks('red_more'))
                 self.game.clicked_more_red += 1
                 self.red_value += 0.15
                 self.game.total_spent += self.red_value_cost
@@ -313,7 +331,7 @@ class Action():
                 self.red_value_cost += 0.1
             if self.orange_buy_value.collidepoint(event.pos) and self.game.score >= self.orange_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('orange_more'))
+                self.game.task_list.append(self.build_tasks('orange_more'))
                 self.game.clicked_more_orange += 1
                 self.orange_value += 0.3
                 self.game.total_spent += self.orange_value_cost
@@ -321,7 +339,7 @@ class Action():
                 self.orange_value_cost += 0.2
             if self.yellow_buy_value.collidepoint(event.pos) and self.game.score >= self.yellow_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('yellow_more'))
+                self.game.task_list.append(self.build_tasks('yellow_more'))
                 self.game.clicked_more_yellow += 1
                 self.yellow_value += 0.45
                 self.game.total_spent += self.yellow_value_cost
@@ -329,7 +347,7 @@ class Action():
                 self.yellow_value_cost += 0.3
             if self.green_buy_value.collidepoint(event.pos) and self.game.score >= self.green_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('green_more'))
+                self.game.task_list.append(self.build_tasks('green_more'))
                 self.game.clicked_more_green += 1
                 self.green_value += 0.60
                 self.game.total_spent += self.green_value_cost
@@ -337,7 +355,7 @@ class Action():
                 self.green_value_cost += 0.4
             if self.blue_buy_value.collidepoint(event.pos) and self.game.score >= self.blue_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('blue_more'))
+                self.game.task_list.append(self.build_tasks('blue_more'))
                 self.game.clicked_more_blue += 1
                 self.blue_value += 0.75
                 self.game.total_spent += self.blue_value_cost
@@ -345,7 +363,7 @@ class Action():
                 self.blue_value_cost += 0.5            
             if self.gray_buy_value.collidepoint(event.pos) and self.game.score >= self.gray_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('gray_more'))
+                self.game.task_list.append(self.build_tasks('gray_more'))
                 self.game.clicked_more_gray += 1
                 self.gray_value += 0.90
                 self.game.total_spent += self.gray_value_cost
@@ -353,7 +371,7 @@ class Action():
                 self.gray_value_cost += 0.6            
             if self.violet_buy_value.collidepoint(event.pos) and self.game.score >= self.violet_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('violet_more'))
+                self.game.task_list.append(self.build_tasks('violet_more'))
                 self.game.clicked_more_violet += 1
                 self.violet_value += 1.05
                 self.game.total_spent += self.violet_value_cost
@@ -362,49 +380,49 @@ class Action():
 
             if self.red_buy_manager.collidepoint(event.pos) and self.game.score >= self.red_manager_cost and not self.red_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('red_manager'))
+                self.game.task_list.append(self.build_tasks('red_manager'))
                 self.red_owned = True
                 self.game.clicked_red_manager += 1
                 self.game.total_spent += self.red_manager_cost
                 self.game.score -= self.red_manager_cost
             if self.orange_buy_manager.collidepoint(event.pos) and self.game.score >= self.orange_manager_cost and not self.orange_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('orange_manager'))
+                self.game.task_list.append(self.build_tasks('orange_manager'))
                 self.orange_owned = True
                 self.game.clicked_orange_manager += 1
                 self.game.total_spent += self.orange_manager_cost
                 self.game.score -= self.orange_manager_cost
             if self.yellow_buy_manager.collidepoint(event.pos) and self.game.score >= self.yellow_manager_cost and not self.yellow_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('yellow_manager'))
+                self.game.task_list.append(self.build_tasks('yellow_manager'))
                 self.yellow_owned = True
                 self.game.clicked_yellow_manager += 1
                 self.game.total_spent += self.yellow_manager_cost
                 self.game.score -= self.yellow_manager_cost
             if self.green_buy_manager.collidepoint(event.pos) and self.game.score >= self.green_manager_cost and not self.green_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('green_manager'))
+                self.game.task_list.append(self.build_tasks('green_manager'))
                 self.green_owned = True
                 self.game.clicked_green_manager += 1
                 self.game.total_spent += self.green_manager_cost
                 self.game.score -= self.green_manager_cost
             if self.blue_buy_manager.collidepoint(event.pos) and self.game.score >= self.blue_manager_cost and not self.blue_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('blue_manager'))
+                self.game.task_list.append(self.build_tasks('blue_manager'))
                 self.blue_owned = True
                 self.game.clicked_blue_manager += 1
                 self.game.total_spent += self.blue_manager_cost
                 self.game.score -= self.blue_manager_cost  
             if self.gray_buy_manager.collidepoint(event.pos) and self.game.score >= self.gray_manager_cost and not self.gray_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('gray_manager'))
+                self.game.task_list.append(self.build_tasks('gray_manager'))
                 self.gray_owned = True
                 self.game.clicked_gray_manager += 1
                 self.game.total_spent += self.gray_manager_cost
                 self.game.score -= self.gray_manager_cost  
             if self.violet_buy_manager.collidepoint(event.pos) and self.game.score >= self.violet_manager_cost and not self.violet_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('violet_manager'))
+                self.game.task_list.append(self.build_tasks('violet_manager'))
                 self.violet_owned = True
                 self.game.clicked_violet_manager += 1
                 self.game.total_spent += self.violet_manager_cost
@@ -412,7 +430,7 @@ class Action():
             
             if self.red_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.red_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('red_multiply'))
+                self.game.task_list.append(self.build_tasks('red_multiply'))
                 self.game.clicked_red_speed += 1
                 self.red_speed += 1.1
                 self.game.total_spent += self.red_multiplier_cost 
@@ -420,7 +438,7 @@ class Action():
                 self.red_multiplier_cost += 100            
             if self.orange_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.orange_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('orange_multiply'))
+                self.game.task_list.append(self.build_tasks('orange_multiply'))
                 self.game.clicked_orange_speed += 1
                 self.orange_speed += 1.1
                 self.game.total_spent += self.orange_multiplier_cost 
@@ -428,7 +446,7 @@ class Action():
                 self.orange_multiplier_cost += 200              
             if self.yellow_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.yellow_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('yellow_multiply'))
+                self.game.task_list.append(self.build_tasks('yellow_multiply'))
                 self.game.clicked_yellow_speed += 1
                 self.yellow_speed += 1.1
                 self.game.total_spent += self.yellow_multiplier_cost 
@@ -436,7 +454,7 @@ class Action():
                 self.yellow_multiplier_cost += 300           
             if self.green_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.green_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('green_multiply'))
+                self.game.task_list.append(self.build_tasks('green_multiply'))
                 self.game.clicked_green_speed += 1
                 self.green_speed += 1.1
                 self.game.total_spent += self.green_multiplier_cost 
@@ -444,7 +462,7 @@ class Action():
                 self.green_multiplier_cost += 400        
             if self.blue_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.blue_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('blue_multiply'))
+                self.game.task_list.append(self.build_tasks('blue_multiply'))
                 self.game.clicked_blue_speed += 1
                 self.blue_speed += 1.1
                 self.game.total_spent += self.blue_multiplier_cost 
@@ -452,7 +470,7 @@ class Action():
                 self.blue_multiplier_cost += 500            
             if self.gray_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.gray_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('gray_multiply'))
+                self.game.task_list.append(self.build_tasks('gray_multiply'))
                 self.game.clicked_gray_speed += 1
                 self.gray_speed += 1.1
                 self.game.total_spent += self.gray_multiplier_cost 
@@ -460,7 +478,7 @@ class Action():
                 self.gray_multiplier_cost += 600          
             if self.violet_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.violet_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
-                self.game.stats_list.append(self.build_stats('violet_multiply'))
+                self.game.task_list.append(self.build_tasks('violet_multiply'))
                 self.game.clicked_violet_speed += 1
                 self.violet_speed += 1.1
                 self.game.total_spent += self.violet_multiplier_cost 
@@ -472,15 +490,15 @@ class Action():
 
         if self.game.game_state == 'action':
             now = pygame.time.get_ticks()
-            if now - self.game.elapsed_time > 1000 and self.game.clock_secs > 58:
-                self.game.clock_secs = 0
-                self.game.clock_mins += 1
-                self.game.elapsed_time = now
-            elif now - self.game.elapsed_time > 1000:
-                self.game.clock_secs += 1
-                self.game.elapsed_time = now
-            if self.game.clock_mins > 58:
-                self.game.clock_min = 59            
+            if now >= self.game.elapsed_milliseconds:
+                self.game.elapsed_milliseconds = now
+
+                ms = int(self.game.elapsed_milliseconds)
+                total_seconds = int(ms / 1000)
+                minutes       = int(total_seconds / 60)
+                seconds       = int(total_seconds - minutes * 60)
+            self.game.clock_mins = "{}".format(minutes)
+            self.game.clock_secs = "{:02}".format(seconds)
 
     def on_render(self):
         """The method to draw game objects to the screen. 
@@ -509,7 +527,7 @@ class Action():
         display_score = self.game.font.render('Money: ${:,.2f}'.format(self.game.score), True, white, black)
         self.game.screen.blit(display_score, (10, 5))
 
-        game_clock_text = self.game.font.render('Time: {:02d}:{:02d}'.format(self.game.clock_mins, self.game.clock_secs), True, white)
+        game_clock_text = self.game.font.render(f'Time: {self.game.clock_mins}:{self.game.clock_secs}', True, white)
         self.game.screen.blit(game_clock_text, (WIDTH - 105, 5))
 
         buy_more = self.game.font.render('Buy More Task Value:', True, white)
@@ -527,16 +545,16 @@ class Action():
         """The method to control the action screen.  
         """
         if self.game.score >= 100000:
-            self.game.stats_list.append(self.build_stats('over'))
+            self.game.task_list.append(self.build_tasks('game_over'))
             
-            self.game.action_end_time = self.game.stats_list[-1]['ticks']
+
             # determine if the elapsed time is eligible to save
-            data = self.game.highscores.copy() # copy the game highscores
+            data = self.game.highscores
             if len(data) < 5:
                 self.game.eligible_to_save = True
             elif len(data) > 0:
                 for value in data.values():
-                    if self.game.action_end_time - self.game.action_start_time < value['time']:
+                    if self.game.task_list[-1]['ticks'] - self.game.action_start_time < value['time']:
                         self.game.eligible_to_save = True                
 
             self.game.game_state = 'over'
@@ -633,16 +651,17 @@ class Leaderboard():
         """ 
         self.game = game
         self.screen_leaderboard = pygame.image.load('screen_leaderboard.png').convert_alpha()
-        self.hs = self.game.highscores.copy()
+        self.hs = self.game.highscores # just to make it easier to type 
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 550, 100, 40])
         self.exit_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 610, 100, 40])
         self.stats_button_text = self.game.font.render("Stats", True, xxxblue)
         self.time = 0
         self.last_score = 0
-        self.hs_1_stats_button = pygame.draw.rect(self.game.screen, gray,                 [(320, 352), (50, 30)])
-        self.hs_2_stats_button = pygame.draw.rect(self.game.screen, gray,                 [(320, 407), (50, 30)])
-        self.hs_3_stats_button = pygame.draw.rect(self.game.screen, gray,                 [(320, 461), (50, 30)])
-        self.hs_4_stats_button = pygame.draw.rect(self.game.screen, gray,                 [(320, 514), (50, 30)])
+        self.hs_0_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 298), (50, 30)])
+        self.hs_1_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 352), (50, 30)])
+        self.hs_2_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 407), (50, 30)])
+        self.hs_3_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 461), (50, 30)])
+        self.hs_4_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 514), (50, 30)])
         
     def tablecell(self, value, pos):
         """The method to draw a tablecell
@@ -654,33 +673,33 @@ class Leaderboard():
         cell_text = self.game.font.render(value, True, white)
         self.game.screen.blit(cell_text, (pos))
     
-    def show_stats(self, index):
-        self.tasks = []
+    def build_task_list(self, index):
+        #self.game.task_list = []
         
-        self.hs = self.game.highscores[index]['stats'].copy()
-        self.time = self.hs[-1]['ticks']
+        self.tasks = self.hs[index]['tasks']
+        self.time = self.hs[index]['time']
 
         for tick in range(self.time + 1):
             data = {"score": int, "action": str}
-            if tick == self.hs[0]['ticks']:
-                if len(self.hs) >= 2:
-                    while self.hs[0]['ticks'] == self.hs[0 + 1]['ticks']:
-                        self.hs.pop(0)         
-                if self.hs[0]['score'] != self.last_score:
-                    self.last_score = self.hs[0]['score']
+            if tick == self.tasks[0]['ticks']:
+                if len(self.tasks) >= 2:
+                    while self.tasks[0]['ticks'] == self.tasks[0 + 1]['ticks']:
+                        self.tasks.pop(0)         
+                if self.tasks[0]['score'] != self.last_score:
+                    self.last_score = self.tasks[0]['score']
                 
                     data["score"] = self.last_score 
-                    data["action"] = self.hs[0]['action']  
+                    data["action"] = self.tasks[0]['action']  
                       
                 else:        
                     data["score"] = self.last_score 
                     data["action"] = '' 
-                self.tasks.append(data)
-                self.hs.pop(0)     
+                self.game.task_list.append(data)
+                self.tasks.pop(0)     
 
 
         self.game.game_state = 'stats'
-        self.game.statistics = Statistics(self.game, self.tasks)
+        self.game.statistics = Statistics(self.game, self.game.task_list)
 
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
@@ -691,21 +710,16 @@ class Leaderboard():
         if event.type == pygame.QUIT:
             self.game.is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-        # if self.hs_0_stats_button:
             if self.hs_0_stats_button.collidepoint(event.pos):
-                self.show_stats(0)
-        # if self.hs_1_stats_button:
+                self.build_task_list(0)
             if self.hs_1_stats_button.collidepoint(event.pos):
-                self.show_stats(1)
-        # if self.hs_2_stats_button:
+                self.build_task_list(1)
             if self.hs_2_stats_button.collidepoint(event.pos):
-                self.show_stats(2)
-        # if self.hs_3_stats_button:
+                self.build_task_list(2)
             if self.hs_3_stats_button.collidepoint(event.pos):
-                self.show_stats(3)
-        # if self.hs_4_stats_button:
+                self.build_task_list(3)
             if self.hs_4_stats_button.collidepoint(event.pos):
-                self.show_stats(4)
+                self.build_task_list(4)
                     
             if self.continue_button.collidepoint(event.pos):
                 # reset game variables
@@ -747,12 +761,13 @@ class Leaderboard():
                 self.game.clicked_violet_speed = 0
 
                 self.game.game_state = 'action'
+            
             if self.exit_button.collidepoint(event.pos):
                 self.game.is_running = False
          
     def on_update(self):
         """The method to modify game objects.  """
-
+        pass
 
     def calculate_mins_secs(self, milliseconds):
         """The method to convert milliseconds to 00:00 format. 
@@ -853,9 +868,9 @@ class Save():
             if self.continue_button.collidepoint(event.pos):
                 # write the data to the file. 
                 date = datetime.datetime.now().strftime("%m/%d/%y %I:%M %p")
-                milliseconds = self.game.action_end_time - self.game.action_start_time
+                milliseconds = self.game.task_list[-1]['ticks'] - self.game.action_start_time
                 next_rec = len(self.game.highscores)
-                self.game.highscores[str(next_rec)] = {'date': date, 'player': self.player_name, 'spent': self.game.total_spent, 'time': milliseconds, 'stats': self.game.stats_list}
+                self.game.highscores[str(next_rec)] = {'date': date, 'player': self.player_name, 'spent': self.game.total_spent, 'time': milliseconds, 'tasks': self.game.task_list}
 
                 sorted_data = dict(sorted(self.game.highscores.items(), key=lambda x : [x[1]['time'], x[1]['spent']]))
                 sorted_data = {index: value for index, value in enumerate(sorted_data.values())}
@@ -865,8 +880,9 @@ class Save():
                 with open('highscores.json','w') as file:
                     file.write(json.dumps(sorted_data))
                         
-                self.game.highscores = sorted_data.copy()
+                self.game.highscores = sorted_data
                 self.player_name = ''
+                self.game.leaderboard = Leaderboard(self.game)
                 self.game.game_state = 'leaderboard'
         elif event.type == pygame.MOUSEBUTTONUP:
             if self.entry_rect.collidepoint(event.pos):
@@ -944,7 +960,7 @@ class Over():
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.stats_button.collidepoint(event.pos):
                 self.game.game_state = 'stats'
-                self.game.statistics = Statistics(self.game, self.game.stats_list)
+                self.game.statistics = Statistics(self.game, self.game.task_list)
             if self.continue_button.collidepoint(event.pos):
                 if self.game.eligible_to_save:
                     self.game.game_state = 'save'
@@ -953,7 +969,7 @@ class Over():
                     
     def on_update(self):
         """The method to modify game objects.  """
-        pass 
+        pass     
     def on_render(self):
         """The method to draw game objects to the screen. 
         """
@@ -964,7 +980,7 @@ class Over():
         else:
             outcome_text = self.game.font.render('Game Over', True, white)
             self.game.screen.blit(outcome_text, (155, 217))
-        game_clock_text = self.game.font.render('{:02d}:{:02d}'.format(self.game.clock_mins, self.game.clock_secs), True, white)
+        game_clock_text = self.game.font.render(f'{self.game.clock_mins}:{self.game.clock_secs}', True, white)
         self.game.screen.blit(game_clock_text, (280, 248))
         total_score = self.game.font.render('${:,.2f}'.format(self.game.score), True, white)
         self.game.screen.blit(total_score, (109, 280))        
@@ -1020,7 +1036,7 @@ class Over():
         pygame.display.flip()
 
     def run(self):
-        """The method to control the splash screen.  
+        """The method to control the game over screen.  
         """
         for event in pygame.event.get():
             self.on_event(event)
@@ -1035,12 +1051,14 @@ class Statistics():
 
         Args:
             game (_type_): A reference to the game object. 
-            stats (List): A list of stats to graph [game.stats_list]. 
+            stats (List): A list of stats to graph [game.task_list]. 
         """
         self.game = game
         self.list_of_stats = stats
         self.screen_stats = pygame.image.load('screen_action.png').convert_alpha()
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 380, 100, 40])
+
+    
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
 
@@ -1057,7 +1075,8 @@ class Statistics():
                 if self.game.action_starting:   
                     self.game.game_state = 'splash'
                 else:             
-                    self.game.game_state = 'over'
+                    self.game.leaderboard = Leaderboard(self.game)
+                    self.game.game_state = 'leaderboard'
     def on_update(self):
         """The method to modify game objects.  """
         pass 
@@ -1065,32 +1084,30 @@ class Statistics():
         """The method to draw game objects to the screen. 
         """
         self.game.screen.blit(self.screen_stats, (0, 0))
-
+        
+        actions = []
         scores = []
         for d in self.list_of_stats:
+            actions.append(d['action'])
             scores.append(d['score'])
+        
+        self.fig, self.ax = plt.subplots()
+        self.fig.set_figwidth(4.0)
+        self.fig.set_figheight(4.0)
+        self.ax.plot(np.array(scores))
+        #ax.scatter(np.array(actions), np.array(scores))
 
 
+        plt.title("$ per millisecond", fontsize = 12, fontweight ='bold')
 
-        fig, ax = plt.subplots()
-        fig.set_figwidth(4)
-        fig.set_figheight(4)
-        ax.plot(np.array(scores))
-
-
-        plt.title("Money per millisecond", fontsize = 12, fontweight ='bold')
-        plt.show()
-
-
-
-
-        canvas = agg.FigureCanvasAgg(fig)
+        canvas = agg.FigureCanvasAgg(self.fig)
         canvas.draw()
         renderer = canvas.get_renderer()
         raw_data = renderer.tostring_rgb()
         size = canvas.get_width_height()
         surf = pygame.image.fromstring(raw_data, size, "RGB")
-        self.game.screen.blit(surf, (WIDTH//2-200,10))
+        self.game.screen.blit(surf, (0,0))
+        plt.close()
 
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 470, 100, 40])
         self.continue_text = self.game.font.render("Continue", True, black)
@@ -1118,8 +1135,7 @@ class Game():
         pygame.mixer.init()
 
         self.action_start_time = 0
-        self.action_end_time = 0
-        self.elapsed_time = 0
+        self.elapsed_milliseconds = 0
         self.width, self.height = WIDTH, HEIGHT  
         # dev_pos_x = MONITOR_WIDTH - WIDTH 
         # dev_pos_y = 133 
@@ -1136,11 +1152,13 @@ class Game():
         self.buy_click_sound = pygame.mixer.Sound('snd_buy_click.ogg')
         self.is_running = True
         self.highscores = {}
+        self.task_list = []
         with open('highscores.json') as file:
             try:
                 data = json.load(file)
                 if isinstance(data, dict):
                     self.highscores =  {int(k):v for k,v in data.items()}
+
             except Exception:
                 # file is empty
                 self.highscores = {}
@@ -1181,7 +1199,7 @@ class Game():
         #     'multiply_gray'     : False,
         #     'multiply_violet'   : False
         # }      
-        self.stats_list = []
+
         self.score = 0    #    99900     #   99999    #       10000  #      
         self.total_spent = 0
         self.clock_secs = 0
@@ -1222,7 +1240,7 @@ class Game():
         self.save = Save(self)
         self.leaderboard = Leaderboard(self)
         self.over = Over(self)     
-        self.statistics = Statistics(self, self.stats_list)   
+        self.statistics = Statistics(self, self.task_list)   
 
     def draw_text(self, coords=(0,0), text="None", color=(255,0,255)):
         textCanvas = self.font.render( str( text ), True, color )
@@ -1240,6 +1258,7 @@ class Game():
                 if self.action_starting:
                     self.action_starting = False
                     self.action_start_time = pygame.time.get_ticks()
+                    self.elapsed_milliseconds = self.action_start_time
                 self.action.run()
             elif self.game_state == 'save':
                 self.save.run()
