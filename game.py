@@ -494,7 +494,7 @@ class Action():
     def on_update(self):
         """The method to modify game objects.  """
         now = pygame.time.get_ticks()
-        if now  >= self.game.elapsed_time - self.game.action_start_time:
+        if now  >= self.game.elapsed_time:
             self.game.elapsed_time = now
             ms = int(self.game.elapsed_time)
             total_seconds = int(ms / 1000)

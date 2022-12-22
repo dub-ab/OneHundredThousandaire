@@ -138,3 +138,6 @@ dmypy.json
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+highscores.json
+highscores.copy.json
