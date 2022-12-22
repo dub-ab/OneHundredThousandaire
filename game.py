@@ -905,6 +905,7 @@ class Save():
                         
                 self.game.highscores = sorted_data
                 self.player_name = ''
+                self.game.eligible_to_save = False
                 self.game.leaderboard = Leaderboard(self.game)
                 self.game.game_state = 'leaderboard'
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -1144,9 +1145,12 @@ class Statistics():
                 matplotlib.pyplot.close()
                 if self.game.action_starting:   
                     self.game.game_state = 'splash'
-                else:             
-                    self.game.leaderboard = Leaderboard(self.game)
-                    self.game.game_state = 'leaderboard'
+                else:         
+                    if self.game.eligible_to_save:
+                        self.game.game_state = 'save'  
+                    else:
+                        self.game.leaderboard = Leaderboard(self.game)
+                        self.game.game_state = 'leaderboard'
     def on_update(self):
         """The method to modify game objects.  """
         pass 
@@ -1235,7 +1239,7 @@ class Game():
         self.action_starting = True
         self.eligible_to_save = False  
 
-        self.score = 99900     #   0    #     99999    #      10000  #      
+        self.score = 0    #      99900     #  99999    #      10000  #      
         self.total_spent = 0
         self.clock_secs = 0
         self.clock_mins = 0
