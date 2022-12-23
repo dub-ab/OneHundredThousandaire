@@ -33,18 +33,18 @@ HEIGHT = 680    #    620
 FPS = 60
 
 # colors
-red     = (255, 000, 000)
-orange  = (255, 127, 000)
-yellow  = (255, 255, 000)
-green   = (000, 255, 000)
-xxxblue = (000, 000, 255)
-blue    = ( 30, 144, 255)
-violet  = (148, 000, 211)
-gray    = (211, 211, 211)
-xxxgray = ( 51,  51,  51)
-black   = (  0,   0,   0)
-white   = (255, 255, 255)
-gold    = (255, 215,   0) 
+red     = (255, 000, 000) # #ff0000
+orange  = (255, 127, 000) # #ff7f00
+yellow  = (255, 255, 000) # #ffff00
+green   = (000, 255, 000) # #00ff00
+xxxblue = (000, 000, 255) # 
+blue    = ( 30, 144, 255) # #1e90ff
+violet  = (148, 000, 211) # #9400d3
+gray    = (211, 211, 211) # #d3d3d3
+xxxgray = ( 51,  51,  51) # 
+black   = (  0,   0,   0) # 
+white   = (255, 255, 255) # 
+gold    = (255, 215,   0) # 
 
 
 
@@ -684,16 +684,93 @@ class Leaderboard():
         stats_dict = {
             'ticks'   : [],
             'scores'  : [],
-            'actions' : []
+            'red' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },
+            'orange' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },
+            'yellow' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },
+            'green' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },
+            'blue' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },
+            'gray' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },
+            'violet' : {
+                'tasks': [],
+                'mores': [],
+                'managers': [],
+                'multiplys': []
+            },   
         }
 
         kounter = 0
         last_score = 0
-        
+        list_ticks = []
+        list_scores = []
+        red_dict = {}
+        red_tasks = []
+        red_mores = []
+        red_managers = []
+        red_multiplys = []
+        orange_dict = {}
+        orange_tasks = []
+        orange_mores = []
+        orange_managers = []
+        orange_multiplys = []
+        yellow_dict = {}
+        yellow_tasks = []
+        yellow_mores = []
+        yellow_managers = []
+        yellow_multiplys = []
+        green_dict = {}
+        green_tasks = []
+        green_mores = []
+        green_managers = []
+        green_multiplys = []
+        blue_dict = {}
+        blue_tasks = []
+        blue_mores = []
+        blue_managers = []
+        blue_multiplys = []
+        gray_dict = {}
+        gray_tasks = []
+        gray_mores = []
+        gray_managers = []
+        gray_multiplys = []
+        violet_dict = {}
+        violet_tasks = []
+        violet_mores = []
+        violet_managers = []
+        violet_multiplys = []
+
+
         for tick in range(self.time + 1):
-            list_ticks = []
-            list_scores = []
-            list_actions = []
+
             if tick == self.tasks[kounter]['ticks']:
 
                 if self.tasks[kounter]['score'] != last_score:
@@ -703,23 +780,134 @@ class Leaderboard():
                     while self.tasks[kounter]['ticks'] == self.tasks[kounter + 1]['ticks']:
                         self.tasks.pop(kounter)
                     else:
+                        # split the action into a color & an action
+                        c, a = self.tasks[kounter]['action'].split('_')  
                         list_ticks.append(tick)
                         list_scores.append(last_score)
-                        list_actions.append(self.tasks[kounter]['action'])
+                        if c == 'red':
+                            if a == 'task': 
+                                red_tasks.append([tick, last_score])
+                            if a == 'more':
+                                red_mores.append([tick, last_score])
+                            if a == 'manager':
+                                red_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                red_multiplys.append([tick, last_score])
+                            red_dict['tasks'] = red_tasks
+                            red_dict['mores'] = red_mores
+                            red_dict['managers'] = red_managers
+                            red_dict['multiplys'] = red_multiplys
+                        
+                        if c == 'orange':
+                            if a == 'task': 
+                                orange_tasks.append([tick, last_score])
+                            if a == 'more':
+                                orange_mores.append([tick, last_score])
+                            if a == 'manager':
+                                orange_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                orange_multiplys.append([tick, last_score])
+                            orange_dict['tasks'] = orange_tasks
+                            orange_dict['mores'] = orange_mores
+                            orange_dict['managers'] = orange_managers
+                            orange_dict['multiplys'] = orange_multiplys
+                        
+                        if c == 'yellow':
+                            if a == 'task': 
+                                yellow_tasks.append([tick, last_score])
+                            if a == 'more':
+                                yellow_mores.append([tick, last_score])
+                            if a == 'manager':
+                                yellow_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                yellow_multiplys.append([tick, last_score])
+
+                            yellow_dict['tasks'] = yellow_tasks
+                            yellow_dict['mores'] = yellow_mores
+                            yellow_dict['managers'] = yellow_managers
+                            yellow_dict['multiplys'] = yellow_multiplys
+
+                        if c == 'green':
+                            if a == 'task': 
+                                green_tasks.append([tick, last_score])
+                            if a == 'more':
+                                green_mores.append([tick, last_score])
+                            if a == 'manager':
+                                green_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                green_multiplys.append([tick, last_score])
+
+                            green_dict['tasks'] = green_tasks
+                            green_dict['mores'] = green_mores
+                            green_dict['managers'] = green_managers
+                            green_dict['multiplys'] = green_multiplys
+    
+                        if c == 'blue':
+                            if a == 'task': 
+                                blue_tasks.append([tick, last_score])
+                            if a == 'more':
+                                blue_mores.append([tick, last_score])
+                            if a == 'manager':
+                                blue_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                blue_multiplys.append([tick, last_score])
+
+                            blue_dict['tasks'] = blue_tasks
+                            blue_dict['mores'] = blue_mores
+                            blue_dict['managers'] = blue_managers
+                            blue_dict['multiplys'] = blue_multiplys
+
+                        if c == 'gray':
+                            if a == 'task': 
+                                gray_tasks.append([tick, last_score])
+                            if a == 'more':
+                                gray_mores.append([tick, last_score])
+                            if a == 'manager':
+                                gray_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                gray_multiplys.append([tick, last_score])
+
+                            gray_dict['tasks'] = gray_tasks
+                            gray_dict['mores'] = gray_mores
+                            gray_dict['managers'] = gray_managers
+                            gray_dict['multiplys'] = gray_multiplys
+
+                        if c == 'violet':
+                            if a == 'task': 
+                                violet_tasks.append([tick, last_score])
+                            if a == 'more':
+                                violet_mores.append([tick, last_score])
+                            if a == 'manager':
+                                violet_managers.append([tick, last_score])
+                            if a == 'multiply':
+                                violet_multiplys.append([tick, last_score])
+
+                            violet_dict['tasks'] = violet_tasks
+                            violet_dict['mores'] = violet_mores
+                            violet_dict['managers'] = violet_managers
+                            violet_dict['multiplys'] = violet_multiplys
+
                         kounter += 1
                 else:
                     list_ticks.append(tick)
                     list_scores.append(last_score)
-                    list_actions.append(self.tasks[kounter]['action'])                 
+               
                     kounter += 1
             else:    
                 list_ticks.append(tick)
                 list_scores.append(last_score)
-                list_actions.append("")     
+    
             
-            stats_dict['ticks'] += list_ticks
-            stats_dict['scores'] += list_scores
-            stats_dict['actions'] += list_actions
+            stats_dict['ticks'] = list_ticks
+            stats_dict['scores'] = list_scores
+            stats_dict['red'] = red_dict
+            stats_dict['orange'] = orange_dict
+            stats_dict['yellow'] = yellow_dict
+            stats_dict['green'] = green_dict
+            stats_dict['blue'] = blue_dict
+            stats_dict['gray'] = gray_dict
+            stats_dict['violet'] = violet_dict
+            
 
         self.game.game_state = 'stats'
         self.game.statistics = Statistics(self.game, stats_dict)
@@ -1127,8 +1315,7 @@ class Statistics():
         self.game = game
         self.stats = stats
         self.screen_stats = pygame.image.load('screen_action1.png').convert_alpha()
-
-
+   
     
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
@@ -1154,23 +1341,63 @@ class Statistics():
     def on_update(self):
         """The method to modify game objects.  """
         pass 
+    
+    def clock_converter(self, x):
+        """The two arguments are the value and tick position"""
+        mins = ""
+        secs = ""
+        if x % 60000 == 0:
+
+            total_seconds = int(x / 1000)
+            minutes       = int(total_seconds / 60)
+            seconds       = int(total_seconds - minutes * 60)
+            mins = "{}".format(minutes)
+            secs = "{:02}".format(seconds)
+
+        s = f"{mins}:{secs}"
+        return s
+    
     def on_render(self):
         """The method to draw game objects to the screen. 
         """
         self.game.screen.blit(self.screen_stats, (0, 0))
         
+        plt.rcParams.update({'figure.autolayout': True})
+        plt.rcParams['lines.markersize'] ** 4
+        fig, ax = plt.subplots()
+        fig.set_figwidth(7.6)
+        fig.set_figheight(5.0)     
 
-        self.fig, self.ax = plt.subplots()
-        self.fig.set_figwidth(7.6)
-        self.fig.set_figheight(5.0)
-        self.ax.plot(self.stats['scores'])
+        plt.style.use('bmh')
+        labels = ax.get_xticklabels()
+        plt.setp(labels, rotation=45, horizontalalignment='right')
+        ax.set(xlabel='Milliseconds', ylabel='Score', title='$ per Millisecond')
 
-        plt.title("$ per millisecond", fontsize = 12, fontweight ='bold')
-        # plt.plot()
-        # plt.show()
+        ax.plot(self.stats['scores'], c='#0000ff')
+       
+        if len(self.stats['red']['managers']) > 0:
+            red_managers = np.array(self.stats['red']['managers'][0])
+            ax.scatter(red_managers[0], red_managers[1], marker='^', c='#ff0000', s=10**2)
+        if len(self.stats['orange']['managers']) > 0:    
+            orange_managers = np.array(self.stats['orange']['managers'][0])
+            ax.scatter(orange_managers[0], orange_managers[1], marker='^', c='#ff7f00', s=10**2)
+        if len(self.stats['yellow']['managers']) > 0:
+            yellow_managers = np.array(self.stats['yellow']['managers'][0])
+            ax.scatter(yellow_managers[0], yellow_managers[1], marker='^', c='#ffff00', s=10**2)
+        if len(self.stats['green']['managers']) > 0:
+            green_managers = np.array(self.stats['green']['managers'][0])
+            ax.scatter(green_managers[0], green_managers[1], marker='^', c='#00ff00', s=10**2)
+        if len(self.stats['blue']['managers']) > 0:
+            blue_managers = np.array(self.stats['blue']['managers'][0])
+            ax.scatter(blue_managers[0], blue_managers[1], marker='^', c='#1e90ff', s=10**2)
+        if len(self.stats['gray']['managers']) > 0:
+            gray_managers = np.array(self.stats['gray']['managers'][0])
+            ax.scatter(gray_managers[0], gray_managers[1], marker='^', c='#d3d3d3', s=10**2)
+        if len(self.stats['violet']['managers']) > 0:
+            violet_managers = np.array(self.stats['violet']['managers'][0])
+            ax.scatter(violet_managers[0], violet_managers[1], marker='^', c='#9400d3', s=10**2)
 
-
-        canvas = agg.FigureCanvasAgg(self.fig)
+        canvas = agg.FigureCanvasAgg(fig)
         canvas.draw()
         renderer = canvas.get_renderer()
         raw_data = renderer.tostring_rgb()
