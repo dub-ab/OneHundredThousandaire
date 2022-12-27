@@ -8,6 +8,7 @@ __author__      = "Anthony B. Washington"
 __license__     = 'MIT'  # https://mit-license.org/
 
 import datetime
+from matplotlib.dates import DateFormatter, MicrosecondLocator, MinuteLocator, SecondLocator
 import pandas as pd
 import json
 import os
@@ -16,7 +17,7 @@ import time
 
 import matplotlib
 
-matplotlib.use("Agg")
+#matplotlib.use("Agg")
 
 import matplotlib.backends.backend_agg as agg
 import matplotlib.pyplot as plt
@@ -44,7 +45,7 @@ gray    = (211, 211, 211) # #d3d3d3
 xxxgray = ( 51,  51,  51) # 
 black   = (  0,   0,   0) # 
 white   = (255, 255, 255) # 
-gold    = (255, 215,   0) # 
+gold    = (255, 215,   0) # #ffd700
 
 
 
@@ -137,13 +138,13 @@ class Action():
         self.blue_length    = 0
         self.gray_length    = 0
         self.violet_length  = 0
-        self.red_speed      = 7
-        self.orange_speed   = 6
-        self.yellow_speed   = 5
-        self.green_speed    = 4
-        self.blue_speed     = 3
-        self.gray_speed     = 2
-        self.violet_speed   = 1
+        self.red_speed      = 14    #    8    #         7
+        self.orange_speed   = 12    #    7    #         6
+        self.yellow_speed   = 10    #    6    #         5
+        self.green_speed    =  8    #    5    #         4
+        self.blue_speed     =  6    #    4    #         3
+        self.gray_speed     =  4    #    3    #         2
+        self.violet_speed   =  2    #    2    #         1
 
         # draw buttons variables
         self.red_value_cost = 1   
@@ -584,13 +585,13 @@ class Action():
             self.blue_length    = 0
             self.gray_length    = 0
             self.violet_length  = 0
-            self.red_speed      = 7
-            self.orange_speed   = 6
-            self.yellow_speed   = 5
-            self.green_speed    = 4
-            self.blue_speed     = 3
-            self.gray_speed     = 2
-            self.violet_speed   = 1
+            self.red_speed      = 14    #    8    #         7
+            self.orange_speed   = 12    #    7    #         6
+            self.yellow_speed   = 10    #    6    #         5
+            self.green_speed    =  8    #    5    #         4
+            self.blue_speed     =  6    #    4    #         3
+            self.gray_speed     =  4    #    3    #         2
+            self.violet_speed   =  2    #    2    #         1
 
             # draw buttons variables
             self.red_value_cost = 1   
@@ -1315,7 +1316,7 @@ class Statistics():
         self.game = game
         self.stats = stats
         self.screen_stats = pygame.image.load('screen_action1.png').convert_alpha()
-   
+        self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 600, 100, 40])
     
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
@@ -1366,50 +1367,188 @@ class Statistics():
         plt.rcParams['lines.markersize'] ** 4
         fig, ax = plt.subplots()
         fig.set_figwidth(7.6)
-        fig.set_figheight(5.0)     
+        fig.set_figheight(7.0)     
 
         plt.style.use('bmh')
         labels = ax.get_xticklabels()
         plt.setp(labels, rotation=45, horizontalalignment='right')
-        ax.set(xlabel='Milliseconds', ylabel='Score', title='$ per Millisecond')
+        ax.set(xlabel='Minutes', ylabel='Score', title='$ per Minute')
 
-        ax.plot(self.stats['scores'], c='#0000ff')
-       
+        ticks_as_time = pd.to_datetime(self.stats['ticks'], unit='ms')
+
+        myFmt = DateFormatter("%M:%S:%f")
+        
+        ax.xaxis.set_minor_locator(MinuteLocator())
+        
+        ax.plot(ticks_as_time, self.stats['scores'], label='score', linestyle='--')
+        
+        ax.xaxis.set_major_formatter(myFmt)
+        
+        if len(self.stats['red']['tasks']) > 0:
+            red_tasks = np.transpose(np.array(self.stats['red']['tasks']))
+            red_tasks_time = pd.to_datetime(red_tasks[0], unit='ms')
+            ax.scatter(red_tasks_time, red_tasks[1], marker='o', c='#ff0000', 
+            s=7**2, label='red task')
+        if len(self.stats['orange']['tasks']) > 0:    
+            orange_tasks = np.transpose(np.array(self.stats['orange']['tasks']))
+            orange_tasks_time = pd.to_datetime(orange_tasks[0], unit='ms')
+            ax.scatter(orange_tasks_time, orange_tasks[1], marker='o', c='#ff7f00', 
+            s=7**2, label='orange task')
+        if len(self.stats['yellow']['tasks']) > 0:
+            yellow_tasks = np.transpose(np.array(self.stats['yellow']['tasks']))
+            yellow_tasks_time = pd.to_datetime(yellow_tasks[0], unit='ms')
+            ax.scatter(yellow_tasks_time, yellow_tasks[1], marker='o',c='#ffd700', 
+            s=7**2, label='yellow task')
+        if len(self.stats['green']['tasks']) > 0:
+            green_tasks = np.transpose(np.array(self.stats['green']['tasks']))
+            green_tasks_time = pd.to_datetime(green_tasks[0], unit='ms')
+            ax.scatter(green_tasks_time, green_tasks[1], marker='o', c='#00ff00', 
+            s=7**2, label='green task')
+        if len(self.stats['blue']['tasks']) > 0:
+            blue_tasks = np.transpose(np.array(self.stats['blue']['tasks']))
+            blue_tasks_time = pd.to_datetime(blue_tasks[0], unit='ms')
+            ax.scatter(blue_tasks_time, blue_tasks[1], marker='o', c='#1e90ff', 
+            s=7**2, label='blue task')
+        if len(self.stats['gray']['tasks']) > 0:
+            gray_tasks = np.transpose(np.array(self.stats['gray']['tasks']))
+            gray_tasks_time = pd.to_datetime(gray_tasks[0], unit='ms')
+            ax.scatter(gray_tasks_time, gray_tasks[1], marker='o', c='#d3d3d3', 
+            s=7**2, label='gray task')
+        if len(self.stats['violet']['tasks']) > 0:
+            violet_tasks = np.transpose(np.array(self.stats['violet']['tasks']))
+            violet_tasks_time = pd.to_datetime(violet_tasks[0], unit='ms')
+            ax.scatter(violet_tasks_time, violet_tasks[1], marker='o', c='#9400d3', 
+            s=7**2, label='violet task')
+
+        if len(self.stats['red']['mores']) > 0:
+            red_mores = np.transpose(np.array(self.stats['red']['mores']))
+            red_mores_time = pd.to_datetime(red_mores[0], unit='ms')
+            ax.scatter(red_mores_time, red_mores[1], marker='+', c='#ff0000', 
+            s=7**2, label='red more')
+        if len(self.stats['orange']['mores']) > 0:    
+            orange_mores = np.transpose(np.array(self.stats['orange']['mores']))
+            orange_mores_time = pd.to_datetime(orange_mores[0], unit='ms')
+            ax.scatter(orange_mores_time, orange_mores[1], marker='+', c='#ff7f00', 
+            s=7**2, label='orange more')
+        if len(self.stats['yellow']['mores']) > 0:
+            yellow_mores = np.transpose(np.array(self.stats['yellow']['mores']))
+            yellow_mores_time = pd.to_datetime(yellow_mores[0], unit='ms')
+            ax.scatter(yellow_mores_time, yellow_mores[1], marker='+', c='#ffd700', 
+            s=7**2, label='yellow more')
+        if len(self.stats['green']['mores']) > 0:
+            green_mores = np.transpose(np.array(self.stats['green']['mores']))
+            green_mores_time = pd.to_datetime(green_mores[0], unit='ms')
+            ax.scatter(green_mores_time, green_mores[1], marker='+', c='#00ff00', 
+            s=7**2, label='green more')
+        if len(self.stats['blue']['mores']) > 0:
+            blue_mores = np.transpose(np.array(self.stats['blue']['mores']))
+            blue_mores_time = pd.to_datetime(blue_mores[0], unit='ms')
+            ax.scatter(blue_mores_time, blue_mores[1], marker='+', c='#1e90ff', 
+            s=7**2, label='blue more')
+        if len(self.stats['gray']['mores']) > 0:
+            gray_mores = np.transpose(np.array(self.stats['gray']['mores']))
+            gray_mores_time = pd.to_datetime(gray_mores[0], unit='ms')
+            ax.scatter(gray_mores_time, gray_mores[1], marker='+', c='#d3d3d3', 
+            s=7**2, label='gray more')
+        if len(self.stats['violet']['mores']) > 0:
+            violet_mores = np.transpose(np.array(self.stats['violet']['mores']))
+            violet_mores_time = pd.to_datetime(violet_mores[0], unit='ms')
+            ax.scatter(violet_mores_time, violet_mores[1], marker='+', c='#9400d3', 
+            s=7**2, label='violet more')
+
         if len(self.stats['red']['managers']) > 0:
-            red_managers = np.array(self.stats['red']['managers'][0])
-            ax.scatter(red_managers[0], red_managers[1], marker='^', c='#ff0000', s=10**2)
+            red_managers = np.transpose(np.array(self.stats['red']['managers']))
+            red_managers_time = pd.to_datetime(red_managers[0], unit='ms')
+            ax.scatter(red_managers_time, red_managers[1], marker='^', c='#ff0000', 
+            s=7**2, label='red manager')
         if len(self.stats['orange']['managers']) > 0:    
-            orange_managers = np.array(self.stats['orange']['managers'][0])
-            ax.scatter(orange_managers[0], orange_managers[1], marker='^', c='#ff7f00', s=10**2)
+            orange_managers = np.transpose(np.array(self.stats['orange']['managers']))
+            orange_managers_time = pd.to_datetime(orange_managers[0], unit='ms')
+            ax.scatter(orange_managers_time, orange_managers[1], marker='^', c='#ff7f00', 
+            s=7**2, label='orange manager')
         if len(self.stats['yellow']['managers']) > 0:
-            yellow_managers = np.array(self.stats['yellow']['managers'][0])
-            ax.scatter(yellow_managers[0], yellow_managers[1], marker='^', c='#ffff00', s=10**2)
+            yellow_managers = np.transpose(np.array(self.stats['yellow']['managers']))
+            yellow_managers_time = pd.to_datetime(yellow_managers[0], unit='ms')            
+            ax.scatter(yellow_managers_time, yellow_managers[1], marker='^', c='#ffd700', 
+            s=7**2, label='yellow manager')
         if len(self.stats['green']['managers']) > 0:
-            green_managers = np.array(self.stats['green']['managers'][0])
-            ax.scatter(green_managers[0], green_managers[1], marker='^', c='#00ff00', s=10**2)
+            green_managers = np.transpose(np.array(self.stats['green']['managers']))
+            green_managers_time = pd.to_datetime(green_managers[0], unit='ms')                
+            ax.scatter(green_managers_time, green_managers[1], marker='^', c='#00ff00', 
+            s=7**2, label='green manager')
         if len(self.stats['blue']['managers']) > 0:
-            blue_managers = np.array(self.stats['blue']['managers'][0])
-            ax.scatter(blue_managers[0], blue_managers[1], marker='^', c='#1e90ff', s=10**2)
+            blue_managers = np.transpose(np.array(self.stats['blue']['managers']))
+            blue_managers_time = pd.to_datetime(blue_managers[0], unit='ms')                
+            ax.scatter(blue_managers_time, blue_managers[1], marker='^', c='#1e90ff', 
+            s=7**2, label='blue manager')
         if len(self.stats['gray']['managers']) > 0:
-            gray_managers = np.array(self.stats['gray']['managers'][0])
-            ax.scatter(gray_managers[0], gray_managers[1], marker='^', c='#d3d3d3', s=10**2)
+            gray_managers = np.transpose(np.array(self.stats['gray']['managers']))
+            gray_managers_time = pd.to_datetime(gray_managers[0], unit='ms')   
+            ax.scatter(gray_managers_time, gray_managers[1], marker='^', c='#d3d3d3', 
+            s=7**2, label='gray manager')
         if len(self.stats['violet']['managers']) > 0:
-            violet_managers = np.array(self.stats['violet']['managers'][0])
-            ax.scatter(violet_managers[0], violet_managers[1], marker='^', c='#9400d3', s=10**2)
+            violet_managers = np.transpose(np.array(self.stats['violet']['managers']))
+            violet_managers_time = pd.to_datetime(violet_managers[0], unit='ms')   
+            ax.scatter(violet_managers_time, violet_managers[1], marker='^', c='#9400d3', 
+            s=7**2, label='violet manager')
 
-        canvas = agg.FigureCanvasAgg(fig)
-        canvas.draw()
-        renderer = canvas.get_renderer()
-        raw_data = renderer.tostring_rgb()
-        size = canvas.get_width_height()
-        surf = pygame.image.fromstring(raw_data, size, "RGB")
-        self.game.screen.blit(surf, (0,0))
-        plt.close()
+        if len(self.stats['red']['multiplys']) > 0:
+            red_multiplys = np.transpose(np.array(self.stats['red']['multiplys']))
+            red_multiplys_time = pd.to_datetime(red_multiplys[0], unit='ms')  
+            ax.scatter(red_multiplys_time, red_multiplys[1], marker='x', c='#ff0000', 
+            s=7**2, label='red multiply')
+        if len(self.stats['orange']['multiplys']) > 0:    
+            orange_multiplys = np.transpose(np.array(self.stats['orange']['multiplys']))
+            orange_multiplys_time = pd.to_datetime(orange_multiplys[0], unit='ms')            
+            ax.scatter(orange_multiplys_time, orange_multiplys[1], marker='x', c='#ff7f00', 
+            s=7**2, label='orange multiply')
+        if len(self.stats['yellow']['multiplys']) > 0:
+            yellow_multiplys = np.transpose(np.array(self.stats['yellow']['multiplys']))
+            yellow_multiplys_time = pd.to_datetime(yellow_multiplys[0], unit='ms') 
+            ax.scatter(yellow_multiplys_time, yellow_multiplys[1], marker='x', c='#ffd700', 
+            s=7**2, label='yellow multiply')
+        if len(self.stats['green']['multiplys']) > 0:
+            green_multiplys = np.transpose(np.array(self.stats['green']['multiplys']))
+            green_multiplys_time = pd.to_datetime(green_multiplys[0], unit='ms') 
+            ax.scatter(green_multiplys_time, green_multiplys[1], marker='x', c='#00ff00', 
+            s=7**2, label='green multiply')
+        if len(self.stats['blue']['multiplys']) > 0:
+            blue_multiplys = np.transpose(np.array(self.stats['blue']['multiplys']))
+            blue_multiplys_time = pd.to_datetime(blue_multiplys[0], unit='ms') 
+            ax.scatter(blue_multiplys_time, blue_multiplys[1], marker='x', c='#1e90ff', 
+            s=7**2, label='blue multiply')
+        if len(self.stats['gray']['multiplys']) > 0:
+            gray_multiplys = np.transpose(np.array(self.stats['gray']['multiplys']))
+            gray_multiplys_time = pd.to_datetime(gray_multiplys[0], unit='ms') 
+            ax.scatter(gray_multiplys_time, gray_multiplys[1], marker='x', c='#d3d3d3', 
+            s=7**2, label='gray multiply')
+        if len(self.stats['violet']['multiplys']) > 0:
+            violet_multiplys = np.transpose(np.array(self.stats['violet']['multiplys']))
+            violet_multiplys_time = pd.to_datetime(violet_multiplys[0], unit='ms') 
+            ax.scatter(violet_multiplys_time, violet_multiplys[1], marker='x', c='#9400d3', 
+            s=7**2, label='violet multiply')
+        
+        ax.legend(loc='upper left')    
+
+
+        # canvas = agg.FigureCanvasAgg(fig)
+        # canvas.draw()
+        # renderer = canvas.get_renderer()
+        # raw_data = renderer.tostring_rgb()
+        # size = canvas.get_width_height()
+        # surf = pygame.image.fromstring(raw_data, size, "RGB")
+        # self.game.screen.blit(surf, (0,0))
+
+
 
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 600, 100, 40])
         self.continue_text = self.game.font.render("Continue", True, black)
         self.game.screen.blit(self.continue_text, ((WIDTH // 2)-38, 612))
         pygame.display.flip()
+
+        plt.show()
+        plt.close()
+
     def run(self):
         """The method to control the splash screen.  
         """
@@ -1462,7 +1601,7 @@ class Game():
                 self.highscores = {}
 
         
-        self.game_state = 'splash'
+        self.game_state = 'leaderboard'
         self.action_starting = True
         self.eligible_to_save = False  
 
