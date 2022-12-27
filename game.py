@@ -1371,7 +1371,7 @@ class Statistics():
 
         plt.style.use('bmh')
         labels = ax.get_xticklabels()
-        plt.setp(labels, rotation=45, horizontalalignment='right')
+        plt.setp(labels, horizontalalignment='right')
         ax.set(xlabel='Minutes', ylabel='Score', title='$ per Minute')
 
         ticks_as_time = pd.to_datetime(self.stats['ticks'], unit='ms')
