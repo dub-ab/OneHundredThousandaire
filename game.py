@@ -251,6 +251,40 @@ class Action():
 
         return {'ticks': record_time, 'score': record_score, 'action': action}
 
+    def draw_thermometer(self, score):
+        """The method to draw a score thermometer. """
+        thermometer_height = 320
+        pygame.draw.circle( self.game.screen, (211, 211, 211), (55, 150), 15, )
+        pygame.draw.circle( self.game.screen, (  0,   0,   0), (55, 150), 10 )        
+        
+        pygame.draw.rect(   self.game.screen, (211, 211, 211), ( 40, 150, 30, thermometer_height))
+
+
+        pygame.draw.circle( self.game.screen, (211, 211, 211), (55, 500), 35, )
+        pygame.draw.circle( self.game.screen, ( 17, 140,  79), (55, 500), 30)
+
+        pygame.draw.rect(   self.game.screen, (  0,   0,   0), ( 45, 150, 20, thermometer_height))   
+
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 150 + thermometer_height * 0.000), (40, 150), 3)
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.125), (40, 190), 1)  
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.250), (40, 230), 3) 
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.375), (40, 270), 1)         
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 150 + thermometer_height * 0.500), (40, 310), 3) 
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.625), (40, 350), 1)  
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.750), (40, 390), 3)
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.875), (40, 430), 1)                
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 150 + thermometer_height * 1.000), (40, 470), 3)
+
+
+
+
+
+
+        score_height = int(((thermometer_height * score)/100000))
+        
+        pygame.draw.rect(   self.game.screen, (  17,  140,   79),(45, 470-score_height, 20, score_height+5))
+
+
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
 
@@ -504,6 +538,7 @@ class Action():
 
         display_score = self.game.font.render('Money: ${:,.2f}'.format(self.game.score), True, white, black)
         self.game.screen.blit(display_score, (10, 5))
+        self.draw_thermometer(self.game.score)
 
         game_clock_text = self.game.font.render(f'Time: {self.game.clock_mins}:{self.game.clock_secs}', True, white)
         self.game.screen.blit(game_clock_text, (WIDTH - 105, 5))
@@ -1066,171 +1101,165 @@ class GraphTasks():
         """
         self.game.screen.blit(self.screen_graph, (0, 0))
 
-        self.fig, self.ax = plt.subplots()
-        self.fig.set_figwidth(15.5)
-        self.fig.set_figheight(6.0)     
+        if self.game.game_state == 'graph':
 
+            self.fig, self.ax = plt.subplots()
+            self.fig.set_figwidth(15.5)
+            self.fig.set_figheight(6.0)     
 
+            self.ax.set(xlabel='Minutes', ylabel='Score', title='$ per Minute')
+            ticks_as_time = pd.to_datetime(self.tasks['ticks'], unit='ms')
+            myFmt = DateFormatter("%M:%S:%f")
+            self.ax.xaxis.set_minor_locator(MinuteLocator())
+            self.ax.plot(ticks_as_time, self.tasks['scores'], label='score', linestyle='--', color='#90542F')
+            self.ax.xaxis.set_major_formatter(myFmt)
+            
+            if len(self.tasks['red']['tasks']) > 0:
+                red_tasks = np.transpose(np.array(self.tasks['red']['tasks']))
+                red_tasks_time = pd.to_datetime(red_tasks[0], unit='ms')
+                self.ax.scatter(red_tasks_time, red_tasks[1], marker='o', c='#ff0000', 
+                s=7**2, label='red task')
+            if len(self.tasks['orange']['tasks']) > 0:    
+                orange_tasks = np.transpose(np.array(self.tasks['orange']['tasks']))
+                orange_tasks_time = pd.to_datetime(orange_tasks[0], unit='ms')
+                self.ax.scatter(orange_tasks_time, orange_tasks[1], marker='o', c='#ff7f00', 
+                s=7**2, label='orange task')
+            if len(self.tasks['yellow']['tasks']) > 0:
+                yellow_tasks = np.transpose(np.array(self.tasks['yellow']['tasks']))
+                yellow_tasks_time = pd.to_datetime(yellow_tasks[0], unit='ms')
+                self.ax.scatter(yellow_tasks_time, yellow_tasks[1], marker='o',c='#ffd700', 
+                s=7**2, label='yellow task')
+            if len(self.tasks['green']['tasks']) > 0:
+                green_tasks = np.transpose(np.array(self.tasks['green']['tasks']))
+                green_tasks_time = pd.to_datetime(green_tasks[0], unit='ms')
+                self.ax.scatter(green_tasks_time, green_tasks[1], marker='o', c='#00ff00', 
+                s=7**2, label='green task')
+            if len(self.tasks['blue']['tasks']) > 0:
+                blue_tasks = np.transpose(np.array(self.tasks['blue']['tasks']))
+                blue_tasks_time = pd.to_datetime(blue_tasks[0], unit='ms')
+                self.ax.scatter(blue_tasks_time, blue_tasks[1], marker='o', c='#1e90ff', 
+                s=7**2, label='blue task')
+            if len(self.tasks['gray']['tasks']) > 0:
+                gray_tasks = np.transpose(np.array(self.tasks['gray']['tasks']))
+                gray_tasks_time = pd.to_datetime(gray_tasks[0], unit='ms')
+                self.ax.scatter(gray_tasks_time, gray_tasks[1], marker='o', c='#cccccc', 
+                s=7**2, label='gray task')
+            if len(self.tasks['violet']['tasks']) > 0:
+                violet_tasks = np.transpose(np.array(self.tasks['violet']['tasks']))
+                violet_tasks_time = pd.to_datetime(violet_tasks[0], unit='ms')
+                self.ax.scatter(violet_tasks_time, violet_tasks[1], marker='o', c='#9400d3', 
+                s=7**2, label='violet task')
 
+            if len(self.tasks['red']['mores']) > 0:
+                red_mores = np.transpose(np.array(self.tasks['red']['mores']))
+                red_mores_time = pd.to_datetime(red_mores[0], unit='ms')
+                self.ax.scatter(red_mores_time, red_mores[1], marker='+', c='#ff0000', 
+                s=7**2, label='red more')
+            if len(self.tasks['orange']['mores']) > 0:    
+                orange_mores = np.transpose(np.array(self.tasks['orange']['mores']))
+                orange_mores_time = pd.to_datetime(orange_mores[0], unit='ms')
+                self.ax.scatter(orange_mores_time, orange_mores[1], marker='+', c='#ff7f00', 
+                s=7**2, label='orange more')
+            if len(self.tasks['yellow']['mores']) > 0:
+                yellow_mores = np.transpose(np.array(self.tasks['yellow']['mores']))
+                yellow_mores_time = pd.to_datetime(yellow_mores[0], unit='ms')
+                self.ax.scatter(yellow_mores_time, yellow_mores[1], marker='+', c='#ffd700', 
+                s=7**2, label='yellow more')
+            if len(self.tasks['green']['mores']) > 0:
+                green_mores = np.transpose(np.array(self.tasks['green']['mores']))
+                green_mores_time = pd.to_datetime(green_mores[0], unit='ms')
+                self.ax.scatter(green_mores_time, green_mores[1], marker='+', c='#00ff00', 
+                s=7**2, label='green more')
+            if len(self.tasks['blue']['mores']) > 0:
+                blue_mores = np.transpose(np.array(self.tasks['blue']['mores']))
+                blue_mores_time = pd.to_datetime(blue_mores[0], unit='ms')
+                self.ax.scatter(blue_mores_time, blue_mores[1], marker='+', c='#1e90ff', 
+                s=7**2, label='blue more')
+            if len(self.tasks['gray']['mores']) > 0:
+                gray_mores = np.transpose(np.array(self.tasks['gray']['mores']))
+                gray_mores_time = pd.to_datetime(gray_mores[0], unit='ms')
+                self.ax.scatter(gray_mores_time, gray_mores[1], marker='+', c='#cccccc', 
+                s=7**2, label='gray more')
+            if len(self.tasks['violet']['mores']) > 0:
+                violet_mores = np.transpose(np.array(self.tasks['violet']['mores']))
+                violet_mores_time = pd.to_datetime(violet_mores[0], unit='ms')
+                self.ax.scatter(violet_mores_time, violet_mores[1], marker='+', c='#9400d3', 
+                s=7**2, label='violet more')
 
-        self.ax.set(xlabel='Minutes', ylabel='Score', title='$ per Minute')
-
-        ticks_as_time = pd.to_datetime(self.tasks['ticks'], unit='ms')
-
-        myFmt = DateFormatter("%M:%S:%f")
-        
-        self.ax.xaxis.set_minor_locator(MinuteLocator())
-        
-        self.ax.plot(ticks_as_time, self.tasks['scores'], label='score', linestyle='--', color='#90542F')
-        
-        self.ax.xaxis.set_major_formatter(myFmt)
-        
-        if len(self.tasks['red']['tasks']) > 0:
-            red_tasks = np.transpose(np.array(self.tasks['red']['tasks']))
-            red_tasks_time = pd.to_datetime(red_tasks[0], unit='ms')
-            self.ax.scatter(red_tasks_time, red_tasks[1], marker='o', c='#ff0000', 
-            s=7**2, label='red task')
-        if len(self.tasks['orange']['tasks']) > 0:    
-            orange_tasks = np.transpose(np.array(self.tasks['orange']['tasks']))
-            orange_tasks_time = pd.to_datetime(orange_tasks[0], unit='ms')
-            self.ax.scatter(orange_tasks_time, orange_tasks[1], marker='o', c='#ff7f00', 
-            s=7**2, label='orange task')
-        if len(self.tasks['yellow']['tasks']) > 0:
-            yellow_tasks = np.transpose(np.array(self.tasks['yellow']['tasks']))
-            yellow_tasks_time = pd.to_datetime(yellow_tasks[0], unit='ms')
-            self.ax.scatter(yellow_tasks_time, yellow_tasks[1], marker='o',c='#ffd700', 
-            s=7**2, label='yellow task')
-        if len(self.tasks['green']['tasks']) > 0:
-            green_tasks = np.transpose(np.array(self.tasks['green']['tasks']))
-            green_tasks_time = pd.to_datetime(green_tasks[0], unit='ms')
-            self.ax.scatter(green_tasks_time, green_tasks[1], marker='o', c='#00ff00', 
-            s=7**2, label='green task')
-        if len(self.tasks['blue']['tasks']) > 0:
-            blue_tasks = np.transpose(np.array(self.tasks['blue']['tasks']))
-            blue_tasks_time = pd.to_datetime(blue_tasks[0], unit='ms')
-            self.ax.scatter(blue_tasks_time, blue_tasks[1], marker='o', c='#1e90ff', 
-            s=7**2, label='blue task')
-        if len(self.tasks['gray']['tasks']) > 0:
-            gray_tasks = np.transpose(np.array(self.tasks['gray']['tasks']))
-            gray_tasks_time = pd.to_datetime(gray_tasks[0], unit='ms')
-            self.ax.scatter(gray_tasks_time, gray_tasks[1], marker='o', c='#cccccc', 
-            s=7**2, label='gray task')
-        if len(self.tasks['violet']['tasks']) > 0:
-            violet_tasks = np.transpose(np.array(self.tasks['violet']['tasks']))
-            violet_tasks_time = pd.to_datetime(violet_tasks[0], unit='ms')
-            self.ax.scatter(violet_tasks_time, violet_tasks[1], marker='o', c='#9400d3', 
-            s=7**2, label='violet task')
-
-        if len(self.tasks['red']['mores']) > 0:
-            red_mores = np.transpose(np.array(self.tasks['red']['mores']))
-            red_mores_time = pd.to_datetime(red_mores[0], unit='ms')
-            self.ax.scatter(red_mores_time, red_mores[1], marker='+', c='#ff0000', 
-            s=7**2, label='red more')
-        if len(self.tasks['orange']['mores']) > 0:    
-            orange_mores = np.transpose(np.array(self.tasks['orange']['mores']))
-            orange_mores_time = pd.to_datetime(orange_mores[0], unit='ms')
-            self.ax.scatter(orange_mores_time, orange_mores[1], marker='+', c='#ff7f00', 
-            s=7**2, label='orange more')
-        if len(self.tasks['yellow']['mores']) > 0:
-            yellow_mores = np.transpose(np.array(self.tasks['yellow']['mores']))
-            yellow_mores_time = pd.to_datetime(yellow_mores[0], unit='ms')
-            self.ax.scatter(yellow_mores_time, yellow_mores[1], marker='+', c='#ffd700', 
-            s=7**2, label='yellow more')
-        if len(self.tasks['green']['mores']) > 0:
-            green_mores = np.transpose(np.array(self.tasks['green']['mores']))
-            green_mores_time = pd.to_datetime(green_mores[0], unit='ms')
-            self.ax.scatter(green_mores_time, green_mores[1], marker='+', c='#00ff00', 
-            s=7**2, label='green more')
-        if len(self.tasks['blue']['mores']) > 0:
-            blue_mores = np.transpose(np.array(self.tasks['blue']['mores']))
-            blue_mores_time = pd.to_datetime(blue_mores[0], unit='ms')
-            self.ax.scatter(blue_mores_time, blue_mores[1], marker='+', c='#1e90ff', 
-            s=7**2, label='blue more')
-        if len(self.tasks['gray']['mores']) > 0:
-            gray_mores = np.transpose(np.array(self.tasks['gray']['mores']))
-            gray_mores_time = pd.to_datetime(gray_mores[0], unit='ms')
-            self.ax.scatter(gray_mores_time, gray_mores[1], marker='+', c='#cccccc', 
-            s=7**2, label='gray more')
-        if len(self.tasks['violet']['mores']) > 0:
-            violet_mores = np.transpose(np.array(self.tasks['violet']['mores']))
-            violet_mores_time = pd.to_datetime(violet_mores[0], unit='ms')
-            self.ax.scatter(violet_mores_time, violet_mores[1], marker='+', c='#9400d3', 
-            s=7**2, label='violet more')
-
-        if len(self.tasks['red']['managers']) > 0:
-            red_managers = np.transpose(np.array(self.tasks['red']['managers']))
-            red_managers_time = pd.to_datetime(red_managers[0], unit='ms')
-            self.ax.scatter(red_managers_time, red_managers[1], marker='^', c='#ff0000', 
-            s=7**2, label='red manager')
-        if len(self.tasks['orange']['managers']) > 0:    
-            orange_managers = np.transpose(np.array(self.tasks['orange']['managers']))
-            orange_managers_time = pd.to_datetime(orange_managers[0], unit='ms')
-            self.ax.scatter(orange_managers_time, orange_managers[1], marker='^', c='#ff7f00', 
-            s=7**2, label='orange manager')
-        if len(self.tasks['yellow']['managers']) > 0:
-            yellow_managers = np.transpose(np.array(self.tasks['yellow']['managers']))
-            yellow_managers_time = pd.to_datetime(yellow_managers[0], unit='ms')            
-            self.ax.scatter(yellow_managers_time, yellow_managers[1], marker='^', c='#ffd700', 
-            s=7**2, label='yellow manager')
-        if len(self.tasks['green']['managers']) > 0:
-            green_managers = np.transpose(np.array(self.tasks['green']['managers']))
-            green_managers_time = pd.to_datetime(green_managers[0], unit='ms')                
-            self.ax.scatter(green_managers_time, green_managers[1], marker='^', c='#00ff00', 
-            s=7**2, label='green manager')
-        if len(self.tasks['blue']['managers']) > 0:
-            blue_managers = np.transpose(np.array(self.tasks['blue']['managers']))
-            blue_managers_time = pd.to_datetime(blue_managers[0], unit='ms')                
-            self.ax.scatter(blue_managers_time, blue_managers[1], marker='^', c='#1e90ff', 
-            s=7**2, label='blue manager')
-        if len(self.tasks['gray']['managers']) > 0:
-            gray_managers = np.transpose(np.array(self.tasks['gray']['managers']))
-            gray_managers_time = pd.to_datetime(gray_managers[0], unit='ms')   
-            self.ax.scatter(gray_managers_time, gray_managers[1], marker='^', c='#cccccc', 
-            s=7**2, label='gray manager')
-        if len(self.tasks['violet']['managers']) > 0:
-            violet_managers = np.transpose(np.array(self.tasks['violet']['managers']))
-            violet_managers_time = pd.to_datetime(violet_managers[0], unit='ms')   
-            self.ax.scatter(violet_managers_time, violet_managers[1], marker='^', c='#9400d3', 
-            s=7**2, label='violet manager')
-        
-        if len(self.tasks['red']['multiplys']) > 0:
-            red_multiplys = np.transpose(np.array(self.tasks['red']['multiplys']))
-            red_multiplys_time = pd.to_datetime(red_multiplys[0], unit='ms')  
-            self.ax.scatter(red_multiplys_time, red_multiplys[1], marker='x', c='#ff0000', 
-            s=7**2, label='red multiply')
-        if len(self.tasks['orange']['multiplys']) > 0:    
-            orange_multiplys = np.transpose(np.array(self.tasks['orange']['multiplys']))
-            orange_multiplys_time = pd.to_datetime(orange_multiplys[0], unit='ms')            
-            self.ax.scatter(orange_multiplys_time, orange_multiplys[1], marker='x', c='#ff7f00', 
-            s=7**2, label='orange multiply')
-        if len(self.tasks['yellow']['multiplys']) > 0:
-            yellow_multiplys = np.transpose(np.array(self.tasks['yellow']['multiplys']))
-            yellow_multiplys_time = pd.to_datetime(yellow_multiplys[0], unit='ms') 
-            self.ax.scatter(yellow_multiplys_time, yellow_multiplys[1], marker='x', c='#ffd700', 
-            s=7**2, label='yellow multiply')
-        if len(self.tasks['green']['multiplys']) > 0:
-            green_multiplys = np.transpose(np.array(self.tasks['green']['multiplys']))
-            green_multiplys_time = pd.to_datetime(green_multiplys[0], unit='ms') 
-            self.ax.scatter(green_multiplys_time, green_multiplys[1], marker='x', c='#00ff00', 
-            s=7**2, label='green multiply')
-        if len(self.tasks['blue']['multiplys']) > 0:
-            blue_multiplys = np.transpose(np.array(self.tasks['blue']['multiplys']))
-            blue_multiplys_time = pd.to_datetime(blue_multiplys[0], unit='ms') 
-            self.ax.scatter(blue_multiplys_time, blue_multiplys[1], marker='x', c='#1e90ff', 
-            s=7**2, label='blue multiply')
-        if len(self.tasks['gray']['multiplys']) > 0:
-            gray_multiplys = np.transpose(np.array(self.tasks['gray']['multiplys']))
-            gray_multiplys_time = pd.to_datetime(gray_multiplys[0], unit='ms') 
-            self.ax.scatter(gray_multiplys_time, gray_multiplys[1], marker='x', c='#cccccc', 
-            s=7**2, label='gray multiply')
-        if len(self.tasks['violet']['multiplys']) > 0:
-            violet_multiplys = np.transpose(np.array(self.tasks['violet']['multiplys']))
-            violet_multiplys_time = pd.to_datetime(violet_multiplys[0], unit='ms') 
-            self.ax.scatter(violet_multiplys_time, violet_multiplys[1], marker='x', c='#9400d3', 
-            s=7**2, label='violet multiply')
-        
-        #self.ax.legend(loc='upper left')   
-        self.ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0 )
+            if len(self.tasks['red']['managers']) > 0:
+                red_managers = np.transpose(np.array(self.tasks['red']['managers']))
+                red_managers_time = pd.to_datetime(red_managers[0], unit='ms')
+                self.ax.scatter(red_managers_time, red_managers[1], marker='^', c='#ff0000', 
+                s=7**2, label='red manager')
+            if len(self.tasks['orange']['managers']) > 0:    
+                orange_managers = np.transpose(np.array(self.tasks['orange']['managers']))
+                orange_managers_time = pd.to_datetime(orange_managers[0], unit='ms')
+                self.ax.scatter(orange_managers_time, orange_managers[1], marker='^', c='#ff7f00', 
+                s=7**2, label='orange manager')
+            if len(self.tasks['yellow']['managers']) > 0:
+                yellow_managers = np.transpose(np.array(self.tasks['yellow']['managers']))
+                yellow_managers_time = pd.to_datetime(yellow_managers[0], unit='ms')            
+                self.ax.scatter(yellow_managers_time, yellow_managers[1], marker='^', c='#ffd700', 
+                s=7**2, label='yellow manager')
+            if len(self.tasks['green']['managers']) > 0:
+                green_managers = np.transpose(np.array(self.tasks['green']['managers']))
+                green_managers_time = pd.to_datetime(green_managers[0], unit='ms')                
+                self.ax.scatter(green_managers_time, green_managers[1], marker='^', c='#00ff00', 
+                s=7**2, label='green manager')
+            if len(self.tasks['blue']['managers']) > 0:
+                blue_managers = np.transpose(np.array(self.tasks['blue']['managers']))
+                blue_managers_time = pd.to_datetime(blue_managers[0], unit='ms')                
+                self.ax.scatter(blue_managers_time, blue_managers[1], marker='^', c='#1e90ff', 
+                s=7**2, label='blue manager')
+            if len(self.tasks['gray']['managers']) > 0:
+                gray_managers = np.transpose(np.array(self.tasks['gray']['managers']))
+                gray_managers_time = pd.to_datetime(gray_managers[0], unit='ms')   
+                self.ax.scatter(gray_managers_time, gray_managers[1], marker='^', c='#cccccc', 
+                s=7**2, label='gray manager')
+            if len(self.tasks['violet']['managers']) > 0:
+                violet_managers = np.transpose(np.array(self.tasks['violet']['managers']))
+                violet_managers_time = pd.to_datetime(violet_managers[0], unit='ms')   
+                self.ax.scatter(violet_managers_time, violet_managers[1], marker='^', c='#9400d3', 
+                s=7**2, label='violet manager')
+            
+            if len(self.tasks['red']['multiplys']) > 0:
+                red_multiplys = np.transpose(np.array(self.tasks['red']['multiplys']))
+                red_multiplys_time = pd.to_datetime(red_multiplys[0], unit='ms')  
+                self.ax.scatter(red_multiplys_time, red_multiplys[1], marker='x', c='#ff0000', 
+                s=7**2, label='red multiply')
+            if len(self.tasks['orange']['multiplys']) > 0:    
+                orange_multiplys = np.transpose(np.array(self.tasks['orange']['multiplys']))
+                orange_multiplys_time = pd.to_datetime(orange_multiplys[0], unit='ms')            
+                self.ax.scatter(orange_multiplys_time, orange_multiplys[1], marker='x', c='#ff7f00', 
+                s=7**2, label='orange multiply')
+            if len(self.tasks['yellow']['multiplys']) > 0:
+                yellow_multiplys = np.transpose(np.array(self.tasks['yellow']['multiplys']))
+                yellow_multiplys_time = pd.to_datetime(yellow_multiplys[0], unit='ms') 
+                self.ax.scatter(yellow_multiplys_time, yellow_multiplys[1], marker='x', c='#ffd700', 
+                s=7**2, label='yellow multiply')
+            if len(self.tasks['green']['multiplys']) > 0:
+                green_multiplys = np.transpose(np.array(self.tasks['green']['multiplys']))
+                green_multiplys_time = pd.to_datetime(green_multiplys[0], unit='ms') 
+                self.ax.scatter(green_multiplys_time, green_multiplys[1], marker='x', c='#00ff00', 
+                s=7**2, label='green multiply')
+            if len(self.tasks['blue']['multiplys']) > 0:
+                blue_multiplys = np.transpose(np.array(self.tasks['blue']['multiplys']))
+                blue_multiplys_time = pd.to_datetime(blue_multiplys[0], unit='ms') 
+                self.ax.scatter(blue_multiplys_time, blue_multiplys[1], marker='x', c='#1e90ff', 
+                s=7**2, label='blue multiply')
+            if len(self.tasks['gray']['multiplys']) > 0:
+                gray_multiplys = np.transpose(np.array(self.tasks['gray']['multiplys']))
+                gray_multiplys_time = pd.to_datetime(gray_multiplys[0], unit='ms') 
+                self.ax.scatter(gray_multiplys_time, gray_multiplys[1], marker='x', c='#cccccc', 
+                s=7**2, label='gray multiply')
+            if len(self.tasks['violet']['multiplys']) > 0:
+                violet_multiplys = np.transpose(np.array(self.tasks['violet']['multiplys']))
+                violet_multiplys_time = pd.to_datetime(violet_multiplys[0], unit='ms') 
+                self.ax.scatter(violet_multiplys_time, violet_multiplys[1], marker='x', c='#9400d3', 
+                s=7**2, label='violet multiply')
+            
+            #self.ax.legend(loc='upper left')   
+            self.ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0 )
 
 
         # canvas = agg.FigureCanvasAgg(fig)
@@ -1307,7 +1336,7 @@ class Game():
         self.action_starting = True
         self.eligible_to_save = False  
 
-        self.score = 0    #      99900     #  99999    #      10000  #      
+        self.score = 0    #     99999    #   150     #   99900     #     10000  #       
         self.total_spent = 0
         self.clock_secs = 0
         self.clock_mins = 0
