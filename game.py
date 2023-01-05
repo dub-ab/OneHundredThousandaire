@@ -246,44 +246,40 @@ class Action():
     def record_task(self, action):
         """The method to record and return a dictionary of a single task.  
         """
-        record_time = self.game.elapsed_time
+        #record_time = self.game.elapsed_time
+        record_time = int(self.game.elapsed_time - self.game.action_start_time)
         record_score = self.game.score         
 
         return {'ticks': record_time, 'score': record_score, 'action': action}
 
     def draw_thermometer(self, score):
         """The method to draw a score thermometer. """
-        thermometer_height = 320
-        pygame.draw.circle( self.game.screen, (211, 211, 211), (55, 150), 15, )
-        pygame.draw.circle( self.game.screen, (  0,   0,   0), (55, 150), 10 )        
+        thermometer_height = 400
+        pygame.draw.circle( self.game.screen, (211, 211, 211), (55, 80), 15, )
+        pygame.draw.circle( self.game.screen, (  0,   0,   0), (55, 80), 10 )        
         
-        pygame.draw.rect(   self.game.screen, (211, 211, 211), ( 40, 150, 30, thermometer_height))
+        pygame.draw.rect(   self.game.screen, (211, 211, 211), ( 40, 80, 30, thermometer_height))
 
 
-        pygame.draw.circle( self.game.screen, (211, 211, 211), (55, 500), 35, )
-        pygame.draw.circle( self.game.screen, ( 17, 140,  79), (55, 500), 30)
+        pygame.draw.circle( self.game.screen, (211, 211, 211), (55, 510), 35, )
+        pygame.draw.circle( self.game.screen, ( 17, 140,  79), (55, 510), 30)
 
-        pygame.draw.rect(   self.game.screen, (  0,   0,   0), ( 45, 150, 20, thermometer_height))   
+        pygame.draw.rect(   self.game.screen, (  0,   0,   0), ( 45, 80, 20, thermometer_height))   
 
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 150 + thermometer_height * 0.000), (40, 150), 3)
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.125), (40, 190), 1)  
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.250), (40, 230), 3) 
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.375), (40, 270), 1)         
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 150 + thermometer_height * 0.500), (40, 310), 3) 
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.625), (40, 350), 1)  
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.750), (40, 390), 3)
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 150 + thermometer_height * 0.875), (40, 430), 1)                
-        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 150 + thermometer_height * 1.000), (40, 470), 3)
-
-
-
-
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 80 + thermometer_height * 0.000), (40, 80 + thermometer_height * 0.000), 3)
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 80 + thermometer_height * 0.125), (40, 80 + thermometer_height * 0.125), 1)  
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 80 + thermometer_height * 0.250), (40, 80 + thermometer_height * 0.250), 3) 
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 80 + thermometer_height * 0.375), (40, 80 + thermometer_height * 0.375), 1)         
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 80 + thermometer_height * 0.500), (40, 80 + thermometer_height * 0.500), 3) 
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 80 + thermometer_height * 0.625), (40, 80 + thermometer_height * 0.625), 1)  
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 80 + thermometer_height * 0.750), (40, 80 + thermometer_height * 0.750), 3)
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (25, 80 + thermometer_height * 0.875), (40, 80 + thermometer_height * 0.875), 1)                
+        pygame.draw.line(   self.game.screen, ( 211,  211,  211), (10, 80 + thermometer_height * 1.000), (40, 80 + thermometer_height * 1.000), 3)
 
 
         score_height = int(((thermometer_height * score)/100000))
         
-        pygame.draw.rect(   self.game.screen, (  17,  140,   79),(45, 470-score_height, 20, score_height+5))
-
+        pygame.draw.rect(   self.game.screen, (  17,  140,   79),(45, 480-score_height, 20, score_height+5))
 
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
@@ -497,14 +493,14 @@ class Action():
     
     def on_update(self):
         """The method to modify game objects.  """
-        now = pygame.time.get_ticks()
-        if now  >= self.game.elapsed_time:
-            self.game.elapsed_time = now
-            ms = int(self.game.elapsed_time)
-            total_seconds = int(ms / 1000)
-            minutes       = int(total_seconds / 60)
-            seconds       = int(total_seconds - minutes * 60)
 
+        self.game.elapsed_time = pygame.time.get_ticks()
+   
+        ms = int(self.game.elapsed_time - self.game.action_start_time)
+        total_seconds = int(ms / 1000)
+        minutes       = int(total_seconds / 60)
+        seconds       = int(total_seconds - minutes * 60)
+        
         if self.game.score != self.last_score:
             self.last_score = self.game.score 
             self.game.task_list.append(self.record_task('on_update'))
@@ -566,7 +562,8 @@ class Action():
                 self.game.eligible_to_save = True
             elif len(data) > 0:
                 for value in data.values():
-                    if self.game.task_list[-1]['ticks'] - self.game.action_start_time < value['time']:
+                    #if self.game.task_list[-1]['ticks'] - self.game.action_start_time < value['time']:
+                    if int(self.game.elapsed_time - self.game.action_start_time) < value['time']:
                         self.game.eligible_to_save = True                
 
             self.game.game_state = 'over'
@@ -857,7 +854,9 @@ class Save():
             if self.continue_button.collidepoint(event.pos):
                 # write the data to the file. 
                 date = datetime.datetime.now().strftime("%m/%d/%y %I:%M %p")
-                milliseconds = self.game.task_list[-1]['ticks'] - self.game.action_start_time
+                int(self.game.elapsed_time - self.game.action_start_time)
+                #milliseconds = self.game.task_list[-1]['ticks'] - self.game.action_start_time
+                milliseconds = int(self.game.elapsed_time - self.game.action_start_time)
                 next_rec = len(self.game.highscores)
                 self.game.highscores[str(next_rec)] = {'date': date, 'player': self.player_name, 'spent': self.game.total_spent, 'time': milliseconds, 'tasks': self.game.task_list}
 
@@ -949,7 +948,7 @@ class Over():
             self.game.is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.stats_button.collidepoint(event.pos):
-                self.game.game_state = 'graph'
+
                 current_tasks = self.game.build_tasks_dict()
                 self.game.game_state = 'graph'
                 self.game.graph = GraphTasks(self.game, current_tasks)
@@ -968,10 +967,10 @@ class Over():
         self.game.screen.blit(self.screen_over, (0, 0))
         if self.game.eligible_to_save:
             outome_text = self.game.font.render('WINNER!', True, (255, 215, 0))
-            self.game.screen.blit(outome_text, (WIDTH//2 - 15, 225))
+            self.game.screen.blit(outome_text, (WIDTH//2 - 15, 230))
         else:
             outcome_text = self.game.font.render('Game Over', True, white)
-            self.game.screen.blit(outcome_text, (WIDTH//2 - 20, 225))
+            self.game.screen.blit(outcome_text, (WIDTH//2 - 65, 230))
         game_clock_text = self.game.font.render(f'{self.game.clock_mins}:{self.game.clock_secs}', True, white)
         self.game.screen.blit(game_clock_text, (475, 265))
         total_score = self.game.font.render('${:,.2f}'.format(self.game.score), True, white)
@@ -1104,8 +1103,8 @@ class GraphTasks():
         if self.game.game_state == 'graph':
 
             self.fig, self.ax = plt.subplots()
-            self.fig.set_figwidth(15.5)
-            self.fig.set_figheight(6.0)     
+            self.fig.set_figwidth(7.5)
+            self.fig.set_figheight(5.5)     
 
             self.ax.set(xlabel='Minutes', ylabel='Score', title='$ per Minute')
             ticks_as_time = pd.to_datetime(self.tasks['ticks'], unit='ms')
@@ -1142,7 +1141,7 @@ class GraphTasks():
             if len(self.tasks['gray']['tasks']) > 0:
                 gray_tasks = np.transpose(np.array(self.tasks['gray']['tasks']))
                 gray_tasks_time = pd.to_datetime(gray_tasks[0], unit='ms')
-                self.ax.scatter(gray_tasks_time, gray_tasks[1], marker='o', c='#cccccc', 
+                self.ax.scatter(gray_tasks_time, gray_tasks[1], marker='o', c='#808080', 
                 s=7**2, label='gray task')
             if len(self.tasks['violet']['tasks']) > 0:
                 violet_tasks = np.transpose(np.array(self.tasks['violet']['tasks']))
@@ -1178,7 +1177,7 @@ class GraphTasks():
             if len(self.tasks['gray']['mores']) > 0:
                 gray_mores = np.transpose(np.array(self.tasks['gray']['mores']))
                 gray_mores_time = pd.to_datetime(gray_mores[0], unit='ms')
-                self.ax.scatter(gray_mores_time, gray_mores[1], marker='+', c='#cccccc', 
+                self.ax.scatter(gray_mores_time, gray_mores[1], marker='+', c='#808080', 
                 s=7**2, label='gray more')
             if len(self.tasks['violet']['mores']) > 0:
                 violet_mores = np.transpose(np.array(self.tasks['violet']['mores']))
@@ -1214,7 +1213,7 @@ class GraphTasks():
             if len(self.tasks['gray']['managers']) > 0:
                 gray_managers = np.transpose(np.array(self.tasks['gray']['managers']))
                 gray_managers_time = pd.to_datetime(gray_managers[0], unit='ms')   
-                self.ax.scatter(gray_managers_time, gray_managers[1], marker='^', c='#cccccc', 
+                self.ax.scatter(gray_managers_time, gray_managers[1], marker='^', c='#808080', 
                 s=7**2, label='gray manager')
             if len(self.tasks['violet']['managers']) > 0:
                 violet_managers = np.transpose(np.array(self.tasks['violet']['managers']))
@@ -1250,7 +1249,7 @@ class GraphTasks():
             if len(self.tasks['gray']['multiplys']) > 0:
                 gray_multiplys = np.transpose(np.array(self.tasks['gray']['multiplys']))
                 gray_multiplys_time = pd.to_datetime(gray_multiplys[0], unit='ms') 
-                self.ax.scatter(gray_multiplys_time, gray_multiplys[1], marker='x', c='#cccccc', 
+                self.ax.scatter(gray_multiplys_time, gray_multiplys[1], marker='x', c='#808080', 
                 s=7**2, label='gray multiply')
             if len(self.tasks['violet']['multiplys']) > 0:
                 violet_multiplys = np.transpose(np.array(self.tasks['violet']['multiplys']))
@@ -1270,7 +1269,7 @@ class GraphTasks():
         # surf = pygame.image.fromstring(raw_data, size, "RGB")
         # self.game.screen.blit(surf, (0,0))
 
-
+        self.game.draw_text((150,550), "Please click the continue button before closing the graph. ", white)
 
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 600, 100, 40])
         self.continue_text = self.game.font.render("Continue", True, black)
@@ -1304,9 +1303,9 @@ class Game():
         self.action_start_time = 0
         self.elapsed_time = 0
         self.width, self.height = WIDTH, HEIGHT  
-        # dev_pos_x = MONITOR_WIDTH - WIDTH 
-        # dev_pos_y = 133 
-        # os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (dev_pos_x,dev_pos_y)
+        dev_pos_x = MONITOR_WIDTH - WIDTH 
+        dev_pos_y = 133 
+        os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (dev_pos_x,dev_pos_y)
         game_icon = pygame.image.load('img_gold_pile.png')
         pygame.display.set_icon(game_icon)
         self.screen = pygame.display.set_mode((self.width, self.height))   
@@ -1336,7 +1335,7 @@ class Game():
         self.action_starting = True
         self.eligible_to_save = False  
 
-        self.score = 0    #     99999    #   150     #   99900     #     10000  #       
+        self.score = 0    #     99900     #    99999    #   150     #    10000  #       
         self.total_spent = 0
         self.clock_secs = 0
         self.clock_mins = 0
@@ -1441,42 +1440,51 @@ class Game():
         last_score = 0
         list_ticks = []
         list_scores = []
-        red_dict = {}
-        red_tasks = []
-        red_mores = []
-        red_managers = []
-        red_multiplys = []
-        orange_dict = {}
-        orange_tasks = []
-        orange_mores = []
-        orange_managers = []
-        orange_multiplys = []
-        yellow_dict = {}
-        yellow_tasks = []
-        yellow_mores = []
-        yellow_managers = []
-        yellow_multiplys = []
-        green_dict = {}
-        green_tasks = []
-        green_mores = []
-        green_managers = []
-        green_multiplys = []
-        blue_dict = {}
-        blue_tasks = []
-        blue_mores = []
-        blue_managers = []
-        blue_multiplys = []
-        gray_dict = {}
-        gray_tasks = []
-        gray_mores = []
-        gray_managers = []
-        gray_multiplys = []
-        violet_dict = {}
-        violet_tasks = []
-        violet_mores = []
-        violet_managers = []
-        violet_multiplys = []
+        
+        red_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
+        orange_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
+        yellow_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
+        green_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
+        blue_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
+        gray_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
 
+        violet_dict = {
+            'tasks': [],
+            'mores': [],
+            'managers': [],
+            'multiplys': []            
+        }
+        
         for tick in range(self.time + 1):
 
             if tick == self.tasks[kounter]['ticks']:
@@ -1494,106 +1502,73 @@ class Game():
                         list_scores.append(last_score)
                         if c == 'red':
                             if a == 'task': 
-                                red_tasks.append([tick, last_score])
+                                red_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                red_mores.append([tick, last_score])
+                                red_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                red_managers.append([tick, last_score])
+                                red_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                red_multiplys.append([tick, last_score])
-                            red_dict['tasks'] = red_tasks
-                            red_dict['mores'] = red_mores
-                            red_dict['managers'] = red_managers
-                            red_dict['multiplys'] = red_multiplys
+                                red_dict['multiplys'].append([tick, last_score])
                         
                         if c == 'orange':
                             if a == 'task': 
-                                orange_tasks.append([tick, last_score])
+                                orange_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                orange_mores.append([tick, last_score])
+                                orange_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                orange_managers.append([tick, last_score])
+                                orange_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                orange_multiplys.append([tick, last_score])
-                            orange_dict['tasks'] = orange_tasks
-                            orange_dict['mores'] = orange_mores
-                            orange_dict['managers'] = orange_managers
-                            orange_dict['multiplys'] = orange_multiplys
+                                orange_dict['multiplys'].append([tick, last_score])
                         
                         if c == 'yellow':
                             if a == 'task': 
-                                yellow_tasks.append([tick, last_score])
+                                yellow_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                yellow_mores.append([tick, last_score])
+                                yellow_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                yellow_managers.append([tick, last_score])
+                                yellow_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                yellow_multiplys.append([tick, last_score])
-
-                            yellow_dict['tasks'] = yellow_tasks
-                            yellow_dict['mores'] = yellow_mores
-                            yellow_dict['managers'] = yellow_managers
-                            yellow_dict['multiplys'] = yellow_multiplys
+                                yellow_dict['multiplys'].append([tick, last_score])
 
                         if c == 'green':
                             if a == 'task': 
-                                green_tasks.append([tick, last_score])
+                                green_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                green_mores.append([tick, last_score])
+                                green_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                green_managers.append([tick, last_score])
+                                green_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                green_multiplys.append([tick, last_score])
-
-                            green_dict['tasks'] = green_tasks
-                            green_dict['mores'] = green_mores
-                            green_dict['managers'] = green_managers
-                            green_dict['multiplys'] = green_multiplys
+                                green_dict['multiplys'].append([tick, last_score])
     
                         if c == 'blue':
                             if a == 'task': 
-                                blue_tasks.append([tick, last_score])
+                                blue_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                blue_mores.append([tick, last_score])
+                                blue_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                blue_managers.append([tick, last_score])
+                                blue_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                blue_multiplys.append([tick, last_score])
-
-                            blue_dict['tasks'] = blue_tasks
-                            blue_dict['mores'] = blue_mores
-                            blue_dict['managers'] = blue_managers
-                            blue_dict['multiplys'] = blue_multiplys
+                                blue_dict['multiplys'].append([tick, last_score])
 
                         if c == 'gray':
                             if a == 'task': 
-                                gray_tasks.append([tick, last_score])
+                                gray_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                gray_mores.append([tick, last_score])
+                                gray_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                gray_managers.append([tick, last_score])
+                                gray_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                gray_multiplys.append([tick, last_score])
-
-                            gray_dict['tasks'] = gray_tasks
-                            gray_dict['mores'] = gray_mores
-                            gray_dict['managers'] = gray_managers
-                            gray_dict['multiplys'] = gray_multiplys
+                                gray_dict['multiplys'].append([tick, last_score])
 
                         if c == 'violet':
                             if a == 'task': 
-                                violet_tasks.append([tick, last_score])
+                                violet_dict['tasks'].append([tick, last_score])
                             if a == 'more':
-                                violet_mores.append([tick, last_score])
+                                violet_dict['mores'].append([tick, last_score])
                             if a == 'manager':
-                                violet_managers.append([tick, last_score])
+                                violet_dict['managers'].append([tick, last_score])
                             if a == 'multiply':
-                                violet_multiplys.append([tick, last_score])
-
-                            violet_dict['tasks'] = violet_tasks
-                            violet_dict['mores'] = violet_mores
-                            violet_dict['managers'] = violet_managers
-                            violet_dict['multiplys'] = violet_multiplys
+                                violet_dict['multiplys'].append([tick, last_score])
 
                         kounter += 1
                 else:
@@ -1614,8 +1589,6 @@ class Game():
         tasks_dict['gray'] = gray_dict
         tasks_dict['violet'] = violet_dict      
 
-        # self.game_state = 'graph'
-        # self.graph = GraphTasks(self, tasks_dict)
         return tasks_dict
 
     def run(self):
@@ -1629,8 +1602,9 @@ class Game():
             elif self.game_state == 'action':
                 if self.action_starting:
                     self.action_starting = False
-                    self.elapsed_time = pygame.time.get_ticks()
-                    self.action_start_time = self.elapsed_time
+                    self.action_start_time = pygame.time.get_ticks()
+
+
                 self.action.run()
             elif self.game_state == 'save':
                 self.save.run()
