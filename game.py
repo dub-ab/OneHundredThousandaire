@@ -1,5 +1,5 @@
 """
-One Hundred Thousandaire - An Idle Clicker
+One Hundred Thousandaire - An Action Scroller
 This application was inspired by:
     Create an Idle Clicker Adventure Capitalist Style Game in Python Using Pygame! Full Game In An HOUR!
     https://www.youtube.com/watch?v=qCA7FBwKOgI
@@ -8,24 +8,16 @@ __author__      = "Anthony B. Washington"
 __license__     = 'MIT'  # https://mit-license.org/
 
 import datetime
-from matplotlib.dates import DateFormatter, MicrosecondLocator, MinuteLocator, SecondLocator
+from matplotlib.dates import DateFormatter, MinuteLocator
 import pandas as pd
 import json
 import os
 import sys
-import time
-
-import matplotlib
-
-#matplotlib.use("Agg")
-
-import matplotlib.backends.backend_agg as agg
 import matplotlib.pyplot as plt
-import matplotlib.figure
+
 
 import numpy as np
 import pygame
-# from matplotlib.axis import Axis
 
 BUFFER = 200
 MONITOR_WIDTH = 1920 - BUFFER
@@ -47,8 +39,6 @@ black   = (  0,   0,   0) #
 white   = (255, 255, 255) # 
 gold    = (255, 215,   0) # #ffd700
 
-
-
 class Splash():
     """The introductory splash screen for One Hundred Thousandaire
     """
@@ -60,6 +50,7 @@ class Splash():
         """
         self.game = game
         self.screen_splash = pygame.image.load('screen_splash1.png').convert_alpha()
+
     def on_event(self, event):
         """The method to manage pygame events upon each cycle. 
 
@@ -78,6 +69,7 @@ class Splash():
     def on_update(self):
         """The method to modify game objects.  """
         pass 
+
     def on_render(self):
         """The method to draw game objects to the screen. 
         """
@@ -91,6 +83,7 @@ class Splash():
         self.game.screen.blit(self.leaderboard_text, (int(WIDTH * 0.75) - 50, 612))        
 
         pygame.display.flip()
+
     def run(self):
         """The method to control the splash screen.  
         """
@@ -246,7 +239,6 @@ class Action():
     def record_task(self, action):
         """The method to record and return a dictionary of a single task.  
         """
-        #record_time = self.game.elapsed_time
         record_time = int(self.game.elapsed_time - self.game.action_start_time)
         record_score = self.game.score         
 
@@ -292,7 +284,6 @@ class Action():
         if event.type == pygame.MOUSEBUTTONDOWN: 
             if self.task1.collidepoint(event.pos) and self.drawing_red == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
-                #self.game.stats['task_red'] = True
                 self.game.task_list.append(self.record_task('red_task'))
                 self.game.clicked_red_task += 1
                 self.drawing_red = True
@@ -562,7 +553,6 @@ class Action():
                 self.game.eligible_to_save = True
             elif len(data) > 0:
                 for value in data.values():
-                    #if self.game.task_list[-1]['ticks'] - self.game.action_start_time < value['time']:
                     if int(self.game.elapsed_time - self.game.action_start_time) < value['time']:
                         self.game.eligible_to_save = True                
 
@@ -665,7 +655,6 @@ class Leaderboard():
         self.exit_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 610, 100, 40])
         self.stats_button_text = self.game.font.render("Stats", True, xxxblue)
         self.time = 0
-        #self.last_score = 0
         self.hs_0_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 298), (50, 30)])
         self.hs_1_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 352), (50, 30)])
         self.hs_2_stats_button = pygame.draw.rect(self.game.screen, gray,[(320, 407), (50, 30)])
@@ -855,7 +844,6 @@ class Save():
                 # write the data to the file. 
                 date = datetime.datetime.now().strftime("%m/%d/%y %I:%M %p")
                 int(self.game.elapsed_time - self.game.action_start_time)
-                #milliseconds = self.game.task_list[-1]['ticks'] - self.game.action_start_time
                 milliseconds = int(self.game.elapsed_time - self.game.action_start_time)
                 next_rec = len(self.game.highscores)
                 self.game.highscores[str(next_rec)] = {'date': date, 'player': self.player_name, 'spent': self.game.total_spent, 'time': milliseconds, 'tasks': self.game.task_list}
@@ -893,18 +881,11 @@ class Save():
     def on_update(self):
         """The method to modify game objects.  """
         pass 
+
     def on_render(self):
         """The method to draw game objects to the screen. 
         """    
         self.game.screen.blit(self.screen_save, (0, 0))
-        # outome_text = self.game.font.render('WINNER!', True, gold)
-        # self.game.screen.blit(outome_text, (165, 217))
-        # game_clock_text = self.game.font.render('{:02d}:{:02d}'.format(self.game.clock_mins, self.game.clock_secs), True, white)
-        # self.game.screen.blit(game_clock_text, (280, 248))
-        # total_score = self.game.font.render('${:,.2f}'.format(self.game.score), True, white)
-        # self.game.screen.blit(total_score, (112, 278))
-        # total_spent_text = self.game.font.render('${:,.2f}'.format(self.game.total_spent), True, white)
-        # self.game.screen.blit(total_spent_text, (298, 278))
         if self.typing:
             pygame.draw.rect(self.game.screen, xxxgray, [(WIDTH // 2) - 63, 400, 130, 40], 0, 5)
         self.entry_rect = pygame.draw.rect(self.game.screen, gold, [(WIDTH // 2) - 63, 400, 130, 40], 5, 5)
@@ -961,6 +942,7 @@ class Over():
     def on_update(self):
         """The method to modify game objects.  """
         pass     
+
     def on_render(self):
         """The method to draw game objects to the screen. 
         """
@@ -1001,7 +983,6 @@ class Over():
         self.game.draw_text((485,  540), f'{self.game.clicked_blue_speed}', white )
         self.game.draw_text((575,  540), f'{self.game.clicked_gray_speed}', white )
         self.game.draw_text((650,  540), f'{self.game.clicked_violet_speed}', white )
-        
         # manager
         if self.game.clicked_red_manager == 1:
             self.game.screen.blit(self.img_manager_owned, (165, 492))
@@ -1257,17 +1238,7 @@ class GraphTasks():
                 self.ax.scatter(violet_multiplys_time, violet_multiplys[1], marker='x', c='#9400d3', 
                 s=7**2, label='violet multiply')
             
-            #self.ax.legend(loc='upper left')   
             self.ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0 )
-
-
-        # canvas = agg.FigureCanvasAgg(fig)
-        # canvas.draw()
-        # renderer = canvas.get_renderer()
-        # raw_data = renderer.tostring_rgb()
-        # size = canvas.get_width_height()
-        # surf = pygame.image.fromstring(raw_data, size, "RGB")
-        # self.game.screen.blit(surf, (0,0))
 
         self.game.draw_text((150,550), "Please click the continue button before closing the graph. ", white)
 
