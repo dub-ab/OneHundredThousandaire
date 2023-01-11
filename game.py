@@ -94,9 +94,6 @@ class Splash():
            
 class Action():
     """The class to handle all in game action. 
-
-    Returns:
-        _type_: _description_
     """
     def __init__(self, game):
         """The Action screen constructor
@@ -104,6 +101,7 @@ class Action():
         Args:
             game (_type_): A reference to the game object. 
         """
+        self.time_string = ""
         self.last_score = 0
         self.game = game          
         self.screen_action = pygame.image.load('screen_action1.png').convert_alpha()
@@ -285,43 +283,43 @@ class Action():
             if self.task1.collidepoint(event.pos) and self.drawing_red == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('red_task'))
-                self.game.clicked_red_task += 1
+                self.game.bought['red_task'] += 1
                 self.drawing_red = True
             if self.task2.collidepoint(event.pos) and self.drawing_orange == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('orange_task'))
-                self.game.clicked_orange_task += 1
+                self.game.bought['orange_task'] += 1
                 self.drawing_orange = True
             if self.task3.collidepoint(event.pos) and self.drawing_yellow == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('yellow_task'))
-                self.game.clicked_yellow_task += 1
+                self.game.bought['yellow_task'] += 1
                 self.drawing_yellow = True
             if self.task4.collidepoint(event.pos) and self.drawing_green == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('green_task'))
-                self.game.clicked_green_task += 1
+                self.game.bought['green_task'] += 1
                 self.drawing_green = True
             if self.task5.collidepoint(event.pos) and self.drawing_blue == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('blue_task'))
-                self.game.clicked_blue_task += 1
+                self.game.bought['blue_task'] += 1
                 self.drawing_blue = True
             if self.task6.collidepoint(event.pos) and self.drawing_gray == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('gray_task'))
-                self.game.clicked_gray_task += 1
+                self.game.bought['gray_task'] += 1
                 self.drawing_gray = True
             if self.task7.collidepoint(event.pos) and self.drawing_violet == False:
                 pygame.mixer.Sound.play(self.game.task_click_sound)
                 self.game.task_list.append(self.record_task('violet_task'))
-                self.game.clicked_violet_task += 1
+                self.game.bought['violet_task'] += 1
                 self.drawing_violet = True
 
             if self.red_buy_value.collidepoint(event.pos) and self.game.score >= self.red_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('red_more'))
-                self.game.clicked_more_red += 1
+                self.game.bought['more_red'] += 1
                 self.red_value += 0.15
                 self.game.total_spent += self.red_value_cost
                 self.game.score -= self.red_value_cost                
@@ -329,7 +327,7 @@ class Action():
             if self.orange_buy_value.collidepoint(event.pos) and self.game.score >= self.orange_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('orange_more'))
-                self.game.clicked_more_orange += 1
+                self.game.bought['more_orange'] += 1
                 self.orange_value += 0.3
                 self.game.total_spent += self.orange_value_cost
                 self.game.score -= self.orange_value_cost                
@@ -337,7 +335,7 @@ class Action():
             if self.yellow_buy_value.collidepoint(event.pos) and self.game.score >= self.yellow_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('yellow_more'))
-                self.game.clicked_more_yellow += 1
+                self.game.bought['more_yellow'] += 1
                 self.yellow_value += 0.45
                 self.game.total_spent += self.yellow_value_cost
                 self.game.score -= self.yellow_value_cost                
@@ -345,7 +343,7 @@ class Action():
             if self.green_buy_value.collidepoint(event.pos) and self.game.score >= self.green_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('green_more'))
-                self.game.clicked_more_green += 1
+                self.game.bought['more_green'] += 1
                 self.green_value += 0.60
                 self.game.total_spent += self.green_value_cost
                 self.game.score -= self.green_value_cost                
@@ -353,7 +351,7 @@ class Action():
             if self.blue_buy_value.collidepoint(event.pos) and self.game.score >= self.blue_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('blue_more'))
-                self.game.clicked_more_blue += 1
+                self.game.bought['more_blue'] += 1
                 self.blue_value += 0.75
                 self.game.total_spent += self.blue_value_cost
                 self.game.score -= self.blue_value_cost                
@@ -361,7 +359,7 @@ class Action():
             if self.gray_buy_value.collidepoint(event.pos) and self.game.score >= self.gray_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('gray_more'))
-                self.game.clicked_more_gray += 1
+                self.game.bought['more_gray'] += 1
                 self.gray_value += 0.90
                 self.game.total_spent += self.gray_value_cost
                 self.game.score -= self.gray_value_cost                
@@ -369,7 +367,7 @@ class Action():
             if self.violet_buy_value.collidepoint(event.pos) and self.game.score >= self.violet_value_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('violet_more'))
-                self.game.clicked_more_violet += 1
+                self.game.bought['more_violet'] += 1
                 self.violet_value += 1.05
                 self.game.total_spent += self.violet_value_cost
                 self.game.score -= self.violet_value_cost                
@@ -379,56 +377,56 @@ class Action():
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('red_manager'))
                 self.red_owned = True
-                self.game.clicked_red_manager += 1
+                self.game.bought['red_manager'] += 1
                 self.game.total_spent += self.red_manager_cost
                 self.game.score -= self.red_manager_cost
             if self.orange_buy_manager.collidepoint(event.pos) and self.game.score >= self.orange_manager_cost and not self.orange_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('orange_manager'))
                 self.orange_owned = True
-                self.game.clicked_orange_manager += 1
+                self.game.bought['orange_manager'] += 1
                 self.game.total_spent += self.orange_manager_cost
                 self.game.score -= self.orange_manager_cost
             if self.yellow_buy_manager.collidepoint(event.pos) and self.game.score >= self.yellow_manager_cost and not self.yellow_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('yellow_manager'))
                 self.yellow_owned = True
-                self.game.clicked_yellow_manager += 1
+                self.game.bought['yellow_manager'] += 1
                 self.game.total_spent += self.yellow_manager_cost
                 self.game.score -= self.yellow_manager_cost
             if self.green_buy_manager.collidepoint(event.pos) and self.game.score >= self.green_manager_cost and not self.green_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('green_manager'))
                 self.green_owned = True
-                self.game.clicked_green_manager += 1
+                self.game.bought['green_manager'] += 1
                 self.game.total_spent += self.green_manager_cost
                 self.game.score -= self.green_manager_cost
             if self.blue_buy_manager.collidepoint(event.pos) and self.game.score >= self.blue_manager_cost and not self.blue_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('blue_manager'))
                 self.blue_owned = True
-                self.game.clicked_blue_manager += 1
+                self.game.bought['blue_manager'] += 1
                 self.game.total_spent += self.blue_manager_cost
                 self.game.score -= self.blue_manager_cost  
             if self.gray_buy_manager.collidepoint(event.pos) and self.game.score >= self.gray_manager_cost and not self.gray_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('gray_manager'))
                 self.gray_owned = True
-                self.game.clicked_gray_manager += 1
+                self.game.bought['gray_manager'] += 1
                 self.game.total_spent += self.gray_manager_cost
                 self.game.score -= self.gray_manager_cost  
             if self.violet_buy_manager.collidepoint(event.pos) and self.game.score >= self.violet_manager_cost and not self.violet_owned:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('violet_manager'))
                 self.violet_owned = True
-                self.game.clicked_violet_manager += 1
+                self.game.bought['violet_manager'] += 1
                 self.game.total_spent += self.violet_manager_cost
                 self.game.score -= self.violet_manager_cost                
             
             if self.red_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.red_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('red_multiply'))
-                self.game.clicked_red_speed += 1
+                self.game.bought['red_speed'] += 1
                 self.red_speed += 1.1
                 self.game.total_spent += self.red_multiplier_cost 
                 self.game.score -= self.red_multiplier_cost    
@@ -436,7 +434,7 @@ class Action():
             if self.orange_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.orange_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('orange_multiply'))
-                self.game.clicked_orange_speed += 1
+                self.game.bought['orange_speed'] += 1
                 self.orange_speed += 1.1
                 self.game.total_spent += self.orange_multiplier_cost 
                 self.game.score -= self.orange_multiplier_cost  
@@ -444,7 +442,7 @@ class Action():
             if self.yellow_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.yellow_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('yellow_multiply'))
-                self.game.clicked_yellow_speed += 1
+                self.game.bought['yellow_speed'] += 1
                 self.yellow_speed += 1.1
                 self.game.total_spent += self.yellow_multiplier_cost 
                 self.game.score -= self.yellow_multiplier_cost     
@@ -452,7 +450,7 @@ class Action():
             if self.green_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.green_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('green_multiply'))
-                self.game.clicked_green_speed += 1
+                self.game.bought['green_speed'] += 1
                 self.green_speed += 1.1
                 self.game.total_spent += self.green_multiplier_cost 
                 self.game.score -= self.green_multiplier_cost        
@@ -460,7 +458,7 @@ class Action():
             if self.blue_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.blue_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('blue_multiply'))
-                self.game.clicked_blue_speed += 1
+                self.game.bought['blue_speed'] += 1
                 self.blue_speed += 1.1
                 self.game.total_spent += self.blue_multiplier_cost 
                 self.game.score -= self.blue_multiplier_cost    
@@ -468,7 +466,7 @@ class Action():
             if self.gray_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.gray_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('gray_multiply'))
-                self.game.clicked_gray_speed += 1
+                self.game.bought['gray_speed'] += 1
                 self.gray_speed += 1.1
                 self.game.total_spent += self.gray_multiplier_cost 
                 self.game.score -= self.gray_multiplier_cost      
@@ -476,7 +474,7 @@ class Action():
             if self.violet_buy_multiplier.collidepoint(event.pos) and self.game.score >= self.violet_multiplier_cost:
                 pygame.mixer.Sound.play(self.game.buy_click_sound)
                 self.game.task_list.append(self.record_task('violet_multiply'))
-                self.game.clicked_violet_speed += 1
+                self.game.bought['violet_speed'] += 1
                 self.violet_speed += 1.1
                 self.game.total_spent += self.violet_multiplier_cost 
                 self.game.score -= self.violet_multiplier_cost     
@@ -488,16 +486,8 @@ class Action():
         self.game.elapsed_time = pygame.time.get_ticks()
    
         ms = int(self.game.elapsed_time - self.game.action_start_time)
-        total_seconds = int(ms / 1000)
-        minutes       = int(total_seconds / 60)
-        seconds       = int(total_seconds - minutes * 60)
-        
-        if self.game.score != self.last_score:
-            self.last_score = self.game.score 
-            self.game.task_list.append(self.record_task('on_update'))
 
-        self.game.clock_mins = "{}".format(minutes)
-        self.game.clock_secs = "{:02}".format(seconds)
+        self.time_string = self.game.convert_milliseconds(ms)
 
     def on_render(self):
         """The method to draw game objects to the screen. 
@@ -527,8 +517,8 @@ class Action():
         self.game.screen.blit(display_score, (10, 5))
         self.draw_thermometer(self.game.score)
 
-        game_clock_text = self.game.font.render(f'Time: {self.game.clock_mins}:{self.game.clock_secs}', True, white)
-        self.game.screen.blit(game_clock_text, (WIDTH - 105, 5))
+        game_clock_text = self.game.font.render(f'Time: {self.time_string[:-1]}', True, white)
+        self.game.screen.blit(game_clock_text, (WIDTH - 145, 5))
 
         buy_more = self.game.font.render('Buy More Task Value:', True, white)
         self.game.screen.blit(buy_more, (200, 460))
@@ -681,18 +671,20 @@ class Leaderboard():
             self.game.is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             index_tasks = {}
+            bought = {}
             if self.hs_0_stats_button.collidepoint(event.pos):
-                index_tasks = self.game.build_tasks_dict(0)                        
+                index_tasks = self.game.build_data_dict(0)    
+                    
             if self.hs_1_stats_button.collidepoint(event.pos):
-                index_tasks = self.game.build_tasks_dict(1)
+                index_tasks = self.game.build_data_dict(1)
             if self.hs_2_stats_button.collidepoint(event.pos):
-                index_tasks = self.game.build_tasks_dict(2)
+                index_tasks = self.game.build_data_dict(2)
             if self.hs_3_stats_button.collidepoint(event.pos):
-                index_tasks = self.game.build_tasks_dict(3)
+                index_tasks = self.game.build_data_dict(3)
             if self.hs_4_stats_button.collidepoint(event.pos):
-                index_tasks = self.game.build_tasks_dict(4)
+                index_tasks = self.game.build_data_dict(4)
             self.game.game_state = 'graph'
-            self.game.graph = GraphTasks(self.game, index_tasks)        
+            self.game.graph = GraphData(self.game, index_tasks)        
             
             if self.continue_button.collidepoint(event.pos):
                 # reset game variables
@@ -706,34 +698,34 @@ class Leaderboard():
                 self.game.total_spent = 0
                 self.game.clock_secs = 0
                 self.game.clock_mins = 0
-                self.game.clicked_red_task = 0
-                self.game.clicked_orange_task    = 0
-                self.game.clicked_yellow_task    = 0
-                self.game.clicked_green_task     = 0
-                self.game.clicked_blue_task      = 0
-                self.game.clicked_gray_task      = 0
-                self.game.clicked_violet_task    = 0
-                self.game.clicked_more_red     = 0
-                self.game.clicked_more_orange  = 0
-                self.game.clicked_more_yellow  = 0
-                self.game.clicked_more_green   = 0
-                self.game.clicked_more_blue   = 0
-                self.game.clicked_more_gray    = 0
-                self.game.clicked_more_violet  = 0
-                self.game.clicked_red_manager = 0
-                self.game.clicked_orange_manager = 0
-                self.game.clicked_yellow_manager = 0
-                self.game.clicked_green_manager = 0
-                self.game.clicked_blue_manager = 0
-                self.game.clicked_gray_manager = 0
-                self.game.clicked_violet_manager = 0
-                self.game.clicked_red_speed = 0
-                self.game.clicked_orange_speed = 0
-                self.game.clicked_yellow_speed = 0
-                self.game.clicked_green_speed = 0
-                self.game.clicked_blue_speed = 0
-                self.game.clicked_gray_speed = 0
-                self.game.clicked_violet_speed = 0
+                self.game.bought['red_task'] = 0
+                self.game.bought['orange_task']    = 0
+                self.game.bought['yellow_task']    = 0
+                self.game.bought['green_task']     = 0
+                self.game.bought['blue_task']      = 0
+                self.game.bought['gray_task']      = 0
+                self.game.bought['violet_task']    = 0
+                self.game.bought['more_red']     = 0
+                self.game.bought['more_orange']  = 0
+                self.game.bought['more_yellow']  = 0
+                self.game.bought['more_green']   = 0
+                self.game.bought['more_blue']   = 0
+                self.game.bought['more_gray']    = 0
+                self.game.bought['more_violet']  = 0
+                self.game.bought['red_manager'] = 0
+                self.game.bought['orange_manager'] = 0
+                self.game.bought['yellow_manager'] = 0
+                self.game.bought['green_manager'] = 0
+                self.game.bought['blue_manager'] = 0
+                self.game.bought['gray_manager'] = 0
+                self.game.bought['violet_manager'] = 0
+                self.game.bought['red_speed'] = 0
+                self.game.bought['orange_speed'] = 0
+                self.game.bought['yellow_speed'] = 0
+                self.game.bought['green_speed'] = 0
+                self.game.bought['blue_speed'] = 0
+                self.game.bought['gray_speed'] = 0
+                self.game.bought['violet_speed'] = 0
 
                 self.game.game_state = 'action'
             
@@ -744,14 +736,15 @@ class Leaderboard():
         """The method to modify game objects.  """
         pass
 
-    def calculate_mins_secs(self, milliseconds):
-        """The method to convert milliseconds to 00:00 format. 
-        """
-        ms = int(milliseconds)
-        total_seconds = int(ms / 1000)
-        minutes       = int(total_seconds / 60)
-        seconds       = int(total_seconds - minutes * 60)
-        return "{}:{:02}".format(minutes, seconds)
+    # def calculate_mins_secs(self, x):
+    #     """The method to convert milliseconds to 00:00 format. 
+    #     """
+    #     td = datetime.timedelta(milliseconds=x)
+    #     if x > 3600000:
+    #         s = str(td)[:-2]
+    #     else:
+    #         s = str(td)[2:-2]
+    #     return s
 
     def on_render(self):
         """The method to draw game objects to the screen. 
@@ -761,7 +754,7 @@ class Leaderboard():
             self.hs_0_name   = self.tablecell(self.hs[0]['player'],                          ( 18, 330))
             self.hs_0_date   = self.tablecell(self.hs[0]['date'],                            (210, 330))
             self.hs_0_spent  = self.tablecell("${:,.2f}".format(float(self.hs[0]['spent'])), (395, 330))
-            self.hs_0_time   = self.tablecell(self.calculate_mins_secs(self.hs[0]['time']),  (590, 330))
+            self.hs_0_time   = self.tablecell(self.game.convert_milliseconds(self.hs[0]['time']),  (550, 330))
             self.hs_0_stats_button = pygame.draw.rect(self.game.screen, gray,               [(685, 325), (50, 25)])
             self.game.screen.blit(self.stats_button_text,                                    (689, 330))
 
@@ -769,7 +762,7 @@ class Leaderboard():
             self.hs_1_name   = self.tablecell(self.hs[1]['player'],                          ( 18, 370))
             self.hs_1_date   = self.tablecell(self.hs[1]['date'],                            (210, 370))
             self.hs_1_spent  = self.tablecell("${:,.2f}".format(float(self.hs[1]['spent'])), (395, 370))
-            self.hs_1_time   = self.tablecell(self.calculate_mins_secs(self.hs[1]['time']),  (590, 370))
+            self.hs_1_time   = self.tablecell(self.game.convert_milliseconds(self.hs[1]['time']),  (550, 370))
             self.hs_1_stats_button = pygame.draw.rect(self.game.screen, gray,               [(685, 365), (50, 25)])
             self.game.screen.blit(self.stats_button_text,                                    (689, 370))
         
@@ -777,7 +770,7 @@ class Leaderboard():
             self.hs_2_name   = self.tablecell(self.hs[2]['player'],                          ( 18, 420))
             self.hs_2_date   = self.tablecell(self.hs[2]['date'],                            (210, 420))
             self.hs_2_spent  = self.tablecell("${:,.2f}".format(float(self.hs[2]['spent'])), (395, 420))
-            self.hs_2_time   = self.tablecell(self.calculate_mins_secs(self.hs[2]['time']),  (590, 420))
+            self.hs_2_time   = self.tablecell(self.game.convert_milliseconds(self.hs[2]['time']),  (550, 420))
             self.hs_2_stats_button = pygame.draw.rect(self.game.screen, gray,               [(685, 415), (50, 25)])
             self.game.screen.blit(self.stats_button_text,                                    (689, 420))
 
@@ -785,7 +778,7 @@ class Leaderboard():
             self.hs_3_name   = self.tablecell(self.hs[3]['player'],                          ( 18, 470))
             self.hs_3_date   = self.tablecell(self.hs[3]['date'],                            (210, 470))
             self.hs_3_spent  = self.tablecell("${:,.2f}".format(float(self.hs[3]['spent'])), (395, 470))
-            self.hs_3_time   = self.tablecell(self.calculate_mins_secs(self.hs[3]['time']),  (590, 470))
+            self.hs_3_time   = self.tablecell(self.game.convert_milliseconds(self.hs[3]['time']),  (550, 470))
             self.hs_3_stats_button = pygame.draw.rect(self.game.screen, gray,               [(685, 465), (50, 25)])
             self.game.screen.blit(self.stats_button_text,                                    (689, 470))
 
@@ -793,7 +786,7 @@ class Leaderboard():
             self.hs_4_name   = self.tablecell(self.hs[4]['player'],                          ( 18, 520))
             self.hs_4_date   = self.tablecell(self.hs[4]['date'],                            (210, 520))
             self.hs_4_spent  = self.tablecell("${:,.2f}".format(float(self.hs[4]['spent'])), (395, 520))
-            self.hs_4_time   = self.tablecell(self.calculate_mins_secs(self.hs[4]['time']),  (590, 520))
+            self.hs_4_time   = self.tablecell(self.game.convert_milliseconds(self.hs[4]['time']),  (550, 520))
             self.hs_4_stats_button = pygame.draw.rect(self.game.screen, gray,               [(685, 515), (50, 25)])
             self.game.screen.blit(self.stats_button_text,                                    (689, 520))
         
@@ -846,7 +839,43 @@ class Save():
                 int(self.game.elapsed_time - self.game.action_start_time)
                 milliseconds = int(self.game.elapsed_time - self.game.action_start_time)
                 next_rec = len(self.game.highscores)
-                self.game.highscores[str(next_rec)] = {'date': date, 'player': self.player_name, 'spent': self.game.total_spent, 'time': milliseconds, 'tasks': self.game.task_list}
+                self.game.highscores[str(next_rec)] = {
+                    'date': date, 
+                    'player': self.player_name, 
+                    'spent': self.game.total_spent, 
+                    'score': self.game.score,
+                    'bought': {
+                        'red_task'      : self.game.bought['red_task']      ,
+                        'orange_task'   : self.game.bought['orange_task']   , 
+                        'yellow_task'   : self.game.bought['yellow_task']   ,
+                        'green_task'    : self.game.bought['green_task']    ,  
+                        'blue_task'     : self.game.bought['blue_task']     ,   
+                        'gray_task'     : self.game.bought['gray_task']     ,   
+                        'violet_task'   : self.game.bought['violet_task']   , 
+                        'more_red'      : self.game.bought['more_red']      ,    
+                        'more_orange'   : self.game.bought['more_orange']   , 
+                        'more_yellow'   : self.game.bought['more_yellow']   , 
+                        'more_green'    : self.game.bought['more_green']    ,  
+                        'more_blue'     : self.game.bought['more_blue']     ,   
+                        'more_gray'     : self.game.bought['more_gray']     ,   
+                        'more_violet'   : self.game.bought['more_violet']   , 
+                        'red_speed'     : self.game.bought['red_speed']     ,   
+                        'orange_speed'  : self.game.bought['orange_speed']  ,
+                        'yellow_speed'  : self.game.bought['yellow_speed']  ,
+                        'green_speed'   : self.game.bought['green_speed']   , 
+                        'blue_speed'    : self.game.bought['blue_speed']    ,  
+                        'gray_speed'    : self.game.bought['gray_speed']    ,  
+                        'violet_speed'  : self.game.bought['violet_speed']  ,
+                        'red_manager'   : self.game.bought['red_manager']   ,
+                        'orange_manager': self.game.bought['orange_manager'],
+                        'yellow_manager': self.game.bought['yellow_manager'],
+                        'green_manager' : self.game.bought['green_manager'] ,
+                        'blue_manager'  : self.game.bought['blue_manager']  ,
+                        'gray_manager'  : self.game.bought['gray_manager']  ,
+                        'violet_manager': self.game.bought['violet_manager'],
+                        },
+                    'time': milliseconds, 
+                    'tasks': self.game.task_list}
 
                 sorted_data = dict(sorted(self.game.highscores.items(), key=lambda x : [x[1]['time'], x[1]['spent']]))
                 sorted_data = {index: value for index, value in enumerate(sorted_data.values())}
@@ -930,9 +959,9 @@ class Over():
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.stats_button.collidepoint(event.pos):
 
-                current_tasks = self.game.build_tasks_dict()
+                current_tasks = self.game.build_data_dict()
                 self.game.game_state = 'graph'
-                self.game.graph = GraphTasks(self.game, current_tasks)
+                self.game.graph = GraphData(self.game, current_tasks)
             if self.continue_button.collidepoint(event.pos):
                 if self.game.eligible_to_save:
                     self.game.game_state = 'save'
@@ -953,50 +982,50 @@ class Over():
         else:
             outcome_text = self.game.font.render('Game Over', True, white)
             self.game.screen.blit(outcome_text, (WIDTH//2 - 65, 230))
-        game_clock_text = self.game.font.render(f'{self.game.clock_mins}:{self.game.clock_secs}', True, white)
+        game_clock_text = self.game.font.render(self.game.convert_milliseconds(self.game.elapsed_time), True, white)
         self.game.screen.blit(game_clock_text, (475, 265))
         total_score = self.game.font.render('${:,.2f}'.format(self.game.score), True, white)
         self.game.screen.blit(total_score, (250, 300))        
         total_spent_text = self.game.font.render('${:,.2f}'.format(self.game.total_spent), True, white)
         self.game.screen.blit(total_spent_text, (490, 300))
         # tasks
-        self.game.draw_text((165,  423), f'{self.game.clicked_red_task}', white )
-        self.game.draw_text((260,  423), f'{self.game.clicked_orange_task}', white )
-        self.game.draw_text((330,  423), f'{self.game.clicked_yellow_task}', white )
-        self.game.draw_text((410,  423), f'{self.game.clicked_green_task}', white )
-        self.game.draw_text((485,  423), f'{self.game.clicked_blue_task}', white )
-        self.game.draw_text((575,  423), f'{self.game.clicked_gray_task}', white )
-        self.game.draw_text((650,  423), f'{self.game.clicked_violet_task}', white )
+        self.game.draw_text((165,  423), f"{self.game.bought['red_task']      }", white )
+        self.game.draw_text((260,  423), f"{self.game.bought['orange_task']   }", white )
+        self.game.draw_text((330,  423), f"{self.game.bought['yellow_task']   }", white )
+        self.game.draw_text((410,  423), f"{self.game.bought['green_task']    }", white )
+        self.game.draw_text((485,  423), f"{self.game.bought['blue_task']     }", white )
+        self.game.draw_text((575,  423), f"{self.game.bought['gray_task']     }", white )
+        self.game.draw_text((650,  423), f"{self.game.bought['violet_task']   }", white )
         # more
-        self.game.draw_text((165,  460), f'{self.game.clicked_more_red}', white )
-        self.game.draw_text((260,  460), f'{self.game.clicked_more_orange}', white )
-        self.game.draw_text((330,  460), f'{self.game.clicked_more_yellow}', white )
-        self.game.draw_text((410,  460), f'{self.game.clicked_more_green}', white )
-        self.game.draw_text((485,  460), f'{self.game.clicked_more_blue}', white )
-        self.game.draw_text((575,  460), f'{self.game.clicked_more_gray}', white )
-        self.game.draw_text((650,  460), f'{self.game.clicked_more_violet}', white )
+        self.game.draw_text((165,  460), f"{self.game.bought['more_red']      }", white )
+        self.game.draw_text((260,  460), f"{self.game.bought['more_orange']   }", white )
+        self.game.draw_text((330,  460), f"{self.game.bought['more_yellow']   }", white )
+        self.game.draw_text((410,  460), f"{self.game.bought['more_green']    }", white )
+        self.game.draw_text((485,  460), f"{self.game.bought['more_blue']     }", white )
+        self.game.draw_text((575,  460), f"{self.game.bought['more_gray']     }", white )
+        self.game.draw_text((650,  460), f"{self.game.bought['more_violet']   }", white )
         # speed
-        self.game.draw_text((165,  540), f'{self.game.clicked_red_speed}', white )
-        self.game.draw_text((260,  540), f'{self.game.clicked_orange_speed}', white )
-        self.game.draw_text((330,  540), f'{self.game.clicked_yellow_speed}', white )
-        self.game.draw_text((410,  540), f'{self.game.clicked_green_speed}', white )
-        self.game.draw_text((485,  540), f'{self.game.clicked_blue_speed}', white )
-        self.game.draw_text((575,  540), f'{self.game.clicked_gray_speed}', white )
-        self.game.draw_text((650,  540), f'{self.game.clicked_violet_speed}', white )
+        self.game.draw_text((165,  540), f"{self.game.bought['red_speed']     }", white )
+        self.game.draw_text((260,  540), f"{self.game.bought['orange_speed']  }", white )
+        self.game.draw_text((330,  540), f"{self.game.bought['yellow_speed']  }", white )
+        self.game.draw_text((410,  540), f"{self.game.bought['green_speed']   }", white )
+        self.game.draw_text((485,  540), f"{self.game.bought['blue_speed']    }", white )
+        self.game.draw_text((575,  540), f"{self.game.bought['gray_speed']    }", white )
+        self.game.draw_text((650,  540), f"{self.game.bought['violet_speed']  }", white )
         # manager
-        if self.game.clicked_red_manager == 1:
+        if self.game.bought['red_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (165, 492))
-        if self.game.clicked_orange_manager == 1:
+        if self.game.bought['orange_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (260, 492))            
-        if self.game.clicked_yellow_manager == 1:
+        if self.game.bought['yellow_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (330, 492))            
-        if self.game.clicked_green_manager == 1:
+        if self.game.bought['green_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (410, 492))            
-        if self.game.clicked_blue_manager == 1:
+        if self.game.bought['blue_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (485, 492))            
-        if self.game.clicked_gray_manager == 1:
+        if self.game.bought['gray_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (575, 492))            
-        if self.game.clicked_violet_manager == 1:
+        if self.game.bought['violet_manager'] == 1:
             self.game.screen.blit(self.img_manager_owned, (650, 492))            
         
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [int(WIDTH * 0.25)-50, 600, 100, 40])
@@ -1015,7 +1044,7 @@ class Over():
         self.on_update()
         self.on_render()
 
-class GraphTasks():
+class GraphData():
     """The graph screen for One Hundred Thousandaire
     """
     def __init__(self, game, tasks):
@@ -1024,10 +1053,13 @@ class GraphTasks():
         Args:
             game (_type_): A reference to the game object. 
             tasks (dict): A dictionary of tasks to graph. 
+
         """
         self.game = game
         self.tasks = tasks
-        self.screen_graph = pygame.image.load('screen_action1.png').convert_alpha()
+
+        self.img_manager_owned = pygame.image.load('img_manager_owned.png')
+        self.screen_graph = pygame.image.load('screen_over1.png').convert_alpha()
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 600, 100, 40])
         plt.rcParams.update({'figure.autolayout': True})
         plt.rcParams['lines.markersize'] ** 4        
@@ -1061,21 +1093,6 @@ class GraphTasks():
         """The method to modify game objects.  """
         pass 
     
-    def clock_converter(self, x):
-        """The two arguments are the value and tick position"""
-        mins = ""
-        secs = ""
-        if x % 60000 == 0:
-
-            total_seconds = int(x / 1000)
-            minutes       = int(total_seconds / 60)
-            seconds       = int(total_seconds - minutes * 60)
-            mins = "{}".format(minutes)
-            secs = "{:02}".format(seconds)
-
-        s = f"{mins}:{secs}"
-        return s
-    
     def on_render(self):
         """The method to draw game objects to the screen. 
         """
@@ -1083,7 +1100,7 @@ class GraphTasks():
 
         if self.game.game_state == 'graph':
 
-            self.fig, self.ax = plt.subplots()
+            self.fig, self.ax = plt.subplots(num=f"{self.tasks['player']}'s Data")
             self.fig.set_figwidth(7.5)
             self.fig.set_figheight(5.5)     
 
@@ -1240,7 +1257,58 @@ class GraphTasks():
             
             self.ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0 )
 
-        self.game.draw_text((150,550), "Please click the continue button before closing the graph. ", white)
+        
+        game_clock_text = self.game.font.render(self.game.convert_milliseconds(self.tasks['time']), True, white)
+        self.game.screen.blit(game_clock_text, (470, 262))
+        total_score = self.game.font.render('${:,.2f}'.format(self.tasks['score']), True, white)
+        self.game.screen.blit(total_score, (250, 300))        
+        total_spent_text = self.game.font.render('${:,.2f}'.format(self.tasks['spent']), True, white)
+        self.game.screen.blit(total_spent_text, (490, 300))
+        # tasks
+        self.game.draw_text((165,  423), f"{self.tasks['bought']['red_task'] }", white )
+        self.game.draw_text((260,  423), f"{self.tasks['bought']['orange_task']   }", white )
+        self.game.draw_text((330,  423), f"{self.tasks['bought']['yellow_task']   }", white )
+        self.game.draw_text((410,  423), f"{self.tasks['bought']['green_task']    }", white )
+        self.game.draw_text((485,  423), f"{self.tasks['bought']['blue_task']     }", white )
+        self.game.draw_text((575,  423), f"{self.tasks['bought']['gray_task']     }", white )
+        self.game.draw_text((650,  423), f"{self.tasks['bought']['violet_task']   }", white )
+        # more
+        self.game.draw_text((165,  460), f"{self.tasks['bought']['more_red']      }", white )
+        self.game.draw_text((260,  460), f"{self.tasks['bought']['more_orange']   }", white )
+        self.game.draw_text((330,  460), f"{self.tasks['bought']['more_yellow']   }", white )
+        self.game.draw_text((410,  460), f"{self.tasks['bought']['more_green']    }", white )
+        self.game.draw_text((485,  460), f"{self.tasks['bought']['more_blue']     }", white )
+        self.game.draw_text((575,  460), f"{self.tasks['bought']['more_gray']     }", white )
+        self.game.draw_text((650,  460), f"{self.tasks['bought']['more_violet']   }", white )
+        # speed
+        self.game.draw_text((165,  540), f"{self.tasks['bought']['red_speed']     }", white )
+        self.game.draw_text((260,  540), f"{self.tasks['bought']['orange_speed']  }", white )
+        self.game.draw_text((330,  540), f"{self.tasks['bought']['yellow_speed']  }", white )
+        self.game.draw_text((410,  540), f"{self.tasks['bought']['green_speed']   }", white )
+        self.game.draw_text((485,  540), f"{self.tasks['bought']['blue_speed']    }", white )
+        self.game.draw_text((575,  540), f"{self.tasks['bought']['gray_speed']    }", white )
+        self.game.draw_text((650,  540), f"{self.tasks['bought']['violet_speed']  }", white )
+        # manager
+        self.img_manager_owned = pygame.image.load('img_manager_owned.png')
+        if self.tasks['bought']['red_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (165, 492))
+        if self.tasks['bought']['orange_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (260, 492))            
+        if self.tasks['bought']['yellow_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (330, 492))            
+        if self.tasks['bought']['green_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (410, 492))            
+        if self.tasks['bought']['blue_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (485, 492))            
+        if self.tasks['bought']['gray_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (575, 492))            
+        if self.tasks['bought']['violet_manager'] == 1:
+            self.game.screen.blit(self.img_manager_owned, (650, 492))            
+        
+
+
+
+        self.game.draw_text((150,650), "Please click the continue button before closing the graph. ", red)
 
         self.continue_button = pygame.draw.rect(self.game.screen, gray, [(WIDTH // 2)-50, 600, 100, 40])
         self.continue_text = self.game.font.render("Continue", True, black)
@@ -1290,6 +1358,37 @@ class Game():
         self.is_running = True
         self.highscores = {}
         self.task_list = []
+        self.bought = {
+            'red_task'      : 0,
+            'orange_task'   : 0,
+            'yellow_task'   : 0,
+            'green_task'    : 0,
+            'blue_task'     : 0,
+            'gray_task'     : 0,
+            'violet_task'   : 0,
+            'more_red'      : 0,
+            'more_orange'   : 0,
+            'more_yellow'   : 0,
+            'more_green'    : 0,
+            'more_blue'     : 0,
+            'more_gray'     : 0,
+            'more_violet'   : 0,
+            'red_speed'     : 0,
+            'orange_speed'  : 0,
+            'yellow_speed'  : 0,
+            'green_speed'   : 0,
+            'blue_speed'    : 0,
+            'gray_speed'    : 0,
+            'violet_speed'  : 0,
+            'red_manager'   : 0,
+            'orange_manager': 0,
+            'yellow_manager': 0,
+            'green_manager' : 0,
+            'blue_manager'  : 0,
+            'gray_manager'  : 0,
+            'violet_manager': 0,
+        }
+
 
         with open('highscores.json') as file:
             try:
@@ -1308,59 +1407,41 @@ class Game():
 
         self.score = 0    #     99900     #    99999    #   150     #    10000  #       
         self.total_spent = 0
-        self.clock_secs = 0
-        self.clock_mins = 0
-        self.clicked_red_task = 0
-        self.clicked_orange_task    = 0
-        self.clicked_yellow_task    = 0
-        self.clicked_green_task     = 0
-        self.clicked_blue_task      = 0
-        self.clicked_gray_task      = 0
-        self.clicked_violet_task    = 0
-        self.clicked_more_red     = 0
-        self.clicked_more_orange  = 0
-        self.clicked_more_yellow  = 0
-        self.clicked_more_green   = 0
-        self.clicked_more_blue   = 0
-        self.clicked_more_gray    = 0
-        self.clicked_more_violet  = 0
-        self.clicked_red_manager = 0
-        self.clicked_orange_manager = 0
-        self.clicked_yellow_manager = 0
-        self.clicked_green_manager = 0
-        self.clicked_blue_manager = 0
-        self.clicked_gray_manager = 0
-        self.clicked_violet_manager = 0
-        self.clicked_red_speed = 0
-        self.clicked_orange_speed = 0
-        self.clicked_yellow_speed = 0
-        self.clicked_green_speed = 0
-        self.clicked_blue_speed = 0
-        self.clicked_gray_speed = 0
-        self.clicked_violet_speed = 0
+        # self.clock_secs = 0
+        # self.clock_mins = 0
 
-        
-   
         self.splash = Splash(self)
         self.action = Action(self)
         self.save = Save(self)
         self.leaderboard = Leaderboard(self)
         self.over = Over(self)     
-        self.graph = GraphTasks(self, self.task_list)   
+        self.graph = GraphData(self, self.task_list)   
 
     def draw_text(self, coords=(0,0), text="None", color=(255,0,255)):
         textCanvas = self.font.render( str( text ), True, color )
         self.screen.blit( textCanvas, coords )
 
-    def build_tasks_dict(self, index=None):
+    def build_data_dict(self, index=None):
         
         if (index is not None):
             self.tasks = self.highscores[index]['tasks']
+            self.bought = self.highscores[index]['bought']
+            self.figure_name = self.highscores[index]['player']
+            self.spent = self.highscores[index]['spent']
+            self.date = self.highscores[index]['date']
+            self.time = self.highscores[index]['time']
+            self.score = self.highscores[index]['score']
         else:
             self.tasks = self.task_list
+            self.bought = self.bought
+            self.figure_name = 'Player'
+            self.spent = self.total_spent
+            self.date = datetime.datetime.now().strftime("%m/%d/%y %I:%M %p")
+            self.time = self.elapsed_time
+        
         self.time = self.tasks[-1]['ticks']
 
-        tasks_dict = {
+        data_dict = {
             'ticks'   : [],
             'scores'  : [],
             'red' : {
@@ -1405,6 +1486,43 @@ class Game():
                 'managers': [],
                 'multiplys': []
             },   
+            'date' : self.date,
+            'player' : self.figure_name,            
+            'spent' : self.spent,
+            'bought' : {
+                'red_task'      : self.bought['red_task']  ,
+                'orange_task'   : self.bought['orange_task']    , 
+                'yellow_task'   : self.bought['yellow_task']    ,
+                'green_task'    : self.bought['green_task']     ,  
+                'blue_task'     : self.bought['blue_task']      ,   
+                'gray_task'     : self.bought['gray_task']      ,   
+                'violet_task'   : self.bought['violet_task']    , 
+                'more_red'      : self.bought['more_red']       ,    
+                'more_orange'   : self.bought['more_orange']    , 
+                'more_yellow'   : self.bought['more_yellow']    , 
+                'more_green'    : self.bought['more_green']     ,  
+                'more_blue'     : self.bought['more_blue']      ,   
+                'more_gray'     : self.bought['more_gray']      ,   
+                'more_violet'   : self.bought['more_violet']    , 
+                'red_speed'     : self.bought['red_speed']      ,   
+                'orange_speed'  : self.bought['orange_speed']   ,
+                'yellow_speed'  : self.bought['yellow_speed']   ,
+                'green_speed'   : self.bought['green_speed']    , 
+                'blue_speed'    : self.bought['blue_speed']     ,  
+                'gray_speed'    : self.bought['gray_speed']     ,  
+                'violet_speed'  : self.bought['violet_speed']   ,
+                'red_manager'   : self.bought['red_manager']    ,
+                'orange_manager': self.bought['orange_manager'] ,
+                'yellow_manager': self.bought['yellow_manager'] ,
+                'green_manager' : self.bought['green_manager']  ,
+                'blue_manager'  : self.bought['blue_manager']   ,
+                'gray_manager'  : self.bought['gray_manager']   ,
+                'violet_manager': self.bought['violet_manager'] ,
+
+
+            },
+            'time' : self.time, 
+            'score': self.score
         }
 
         kounter = 0
@@ -1448,7 +1566,6 @@ class Game():
             'managers': [],
             'multiplys': []            
         }
-
         violet_dict = {
             'tasks': [],
             'mores': [],
@@ -1550,17 +1667,28 @@ class Game():
                 list_ticks.append(tick)
                 list_scores.append(last_score)
                
-        tasks_dict['ticks'] = list_ticks
-        tasks_dict['scores'] = list_scores
-        tasks_dict['red'] = red_dict
-        tasks_dict['orange'] = orange_dict
-        tasks_dict['yellow'] = yellow_dict
-        tasks_dict['green'] = green_dict
-        tasks_dict['blue'] = blue_dict
-        tasks_dict['gray'] = gray_dict
-        tasks_dict['violet'] = violet_dict      
+        data_dict['ticks'] = list_ticks
+        data_dict['scores'] = list_scores
+        data_dict['red'] = red_dict
+        data_dict['orange'] = orange_dict
+        data_dict['yellow'] = yellow_dict
+        data_dict['green'] = green_dict
+        data_dict['blue'] = blue_dict
+        data_dict['gray'] = gray_dict
+        data_dict['violet'] = violet_dict      
 
-        return tasks_dict
+        return data_dict
+
+    def convert_milliseconds(self, x):
+       """The method to convert milliseconds to 00:00 format. 
+       """
+       td = datetime.timedelta(milliseconds=x)
+       if x > 3600000:
+           s = str(td)[:-2]
+       else:
+           s = str(td)[2:-2]
+       return s   
+
 
     def run(self):
         """The method to loop through the game states. 
