@@ -13,3 +13,5 @@ Each task has three options:
     (Tip: Use the mouse wheel to quickly "scroll" through large purchases)
   - You can buy a task automation manager.  The manager will automatically start each task without you having to click the oval icon.
   - You can buy a task speed multiplier.  Each purchase will increase the task speed by 10%. 
+
+Upon completion, there is an option to view a graphical representation of the actions taken during gameplay.   
