@@ -139,5 +139,5 @@ dmypy.json
 !.vscode/extensions.json 
 .history
 
-#highscores.json
-#highscores.copy.json
+highscores.json
+highscores.copy.json

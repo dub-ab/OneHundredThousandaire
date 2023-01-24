@@ -98,10 +98,18 @@ class Action():
         Args:
             game (_type_): A reference to the game object. 
         """
+        
         self.time_string = ""
         self.last_score = 0
         self.game = game          
         self.screen_action = pygame.image.load('screen_action1.png').convert_alpha()
+        self.red_button = pygame.image.load('img/red_button.png').convert_alpha()
+        self.orange_button = pygame.image.load('img/orange_button.png').convert_alpha()
+        self.yellow_button = pygame.image.load('img/yellow_button.png').convert_alpha()
+        self.green_button = pygame.image.load('img/green_button.png').convert_alpha()
+        self.blue_button = pygame.image.load('img/blue_button.png').convert_alpha()
+        self.gray_button = pygame.image.load('img/gray_button.png').convert_alpha()
+        self.violet_button = pygame.image.load('img/violet_button.png').convert_alpha()
         self.TASK_LENGTH = 450
        
         # game variables
@@ -216,20 +224,44 @@ class Action():
         Returns:
             tuple: A tuple containing: the color_button, the manager_button, and the speed_button
         """
-        color_button = pygame.draw.rect(self.game.screen, color, [x_coord, 475, 60, 40])
-        color_cost = self.game.font.render(str(round(cost, 2)), True, black)
-        self.game.screen.blit(color_cost, (x_coord + 10, 485))
+        cb = pygame.Surface((64, 64))
+        cb_rect = cb.get_rect(topleft=[x_coord, 475])
+        mb = pygame.Surface((64, 64))
+        mb_rect = mb.get_rect(topleft=[x_coord, 535])
+        sb = pygame.Surface((64, 64))
+        sb_rect = sb.get_rect(topleft=[x_coord, 595])
+
+        if color == red:
+            cb = mb = sb = self.red_button
+        if color == orange:
+            cb = mb = sb = self.orange_button
+        if color == yellow:
+            cb = mb = sb = self.yellow_button
+        if color == green:
+            cb = mb = sb = self.green_button
+        if color == blue:
+            cb = mb = sb = self.blue_button     
+        if color == gray:
+            cb = mb = sb = self.gray_button
+        if color == violet:
+            cb = mb = sb = self.violet_button
+        
+        self.game.screen.blit(cb, cb_rect)
+        self.game.screen.blit(mb, mb_rect)
+        self.game.screen.blit(sb, sb_rect)
+
         if not owned:
-            manager_button = pygame.draw.rect(self.game.screen, color, [x_coord, 535, 60, 40])
             manager_text = self.game.font.render(str(round(manager_cost, 2)), True, black)
         else:
-            manager_button = pygame.draw.rect(self.game.screen, color, [x_coord, 535, 60, 40], 1, 1)
             manager_text = self.game.font.render('', True, black)
         self.game.screen.blit(manager_text, (x_coord + 3, 545))
-        speed_button = pygame.draw.rect(self.game.screen, color, [x_coord, 595, 60, 40])
+        
         speed_text = self.game.font.render(f'{speed_multiplier/1000}K', True, black)
         self.game.screen.blit(speed_text, (x_coord + 2, 605))
-        return color_button, manager_button, speed_button    
+
+        color_cost = self.game.font.render(str(round(cost, 2)), True, black)
+        self.game.screen.blit(color_cost, (x_coord + 10, 485))
+        return cb_rect, mb_rect, sb_rect    
      
     def record_task(self, action):
         """The method to record and return a dictionary of a single task.  
@@ -1303,9 +1335,9 @@ class Game():
         self.action_start_time = 0
         self.elapsed_time = 0
         self.width, self.height = WIDTH, HEIGHT  
-        dev_pos_x = MONITOR_WIDTH - WIDTH 
-        dev_pos_y = 133 
-        os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (dev_pos_x,dev_pos_y)
+        # dev_pos_x = MONITOR_WIDTH - WIDTH 
+        # dev_pos_y = 133 
+        # os.environ['SDL_VIDEO_WINDOW_POS'] = '%i,%i' % (dev_pos_x,dev_pos_y)
         game_icon = pygame.image.load('img_gold_pile.png')
         pygame.display.set_icon(game_icon)
         self.screen = pygame.display.set_mode((self.width, self.height))   
@@ -1362,7 +1394,7 @@ class Game():
                 self.highscores = {}
 
         
-        self.game_state = 'splash'
+        self.game_state = 'action'
         self.action_starting = True
         self.eligible_to_save = False  
 
