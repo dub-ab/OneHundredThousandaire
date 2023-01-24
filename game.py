@@ -62,7 +62,7 @@ class Splash():
         if event.type == pygame.QUIT:
             self.game.is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.start_now_button.collidepoint(event.pos):
+            if self.start_now_button_rect.collidepoint(event.pos):
                 self.game.game_state = 'action'
             if self.leaderboard_button.collidepoint(event.pos):
                 self.game.leaderboard = Leaderboard(self.game)
@@ -72,8 +72,11 @@ class Splash():
         """The method to draw game objects to the screen. 
         """
         self.game.screen.blit(self.screen_splash, (0, 0))
+        self.start_now_button = lb_button = pygame.image.load('img/gray_button.png')
+        #self.start_now_button = pygame.draw.rect(self.game.screen, gray, [int(WIDTH * 0.25)-50, 600, 100, 40])
+        self.start_now_button_rect = self.start_now_button.get_rect(topleft=(int(WIDTH * 0.25)-50, 600))        
+        self.game.screen.blit(self.start_now_button, self.start_now_button_rect)
 
-        self.start_now_button = pygame.draw.rect(self.game.screen, gray, [int(WIDTH * 0.25)-50, 600, 100, 40])
         self.start_now_text = self.game.font.render("Start Now", True, black)
         self.game.screen.blit(self.start_now_text, (int(WIDTH * 0.25)-38, 612))
         self.leaderboard_button = pygame.draw.rect(self.game.screen, gray, [int(WIDTH * 0.75)-50, 600, 100, 40])
@@ -1394,7 +1397,7 @@ class Game():
                 self.highscores = {}
 
         
-        self.game_state = 'action'
+        self.game_state = 'splash'
         self.action_starting = True
         self.eligible_to_save = False  
 
