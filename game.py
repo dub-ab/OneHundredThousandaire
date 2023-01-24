@@ -106,6 +106,13 @@ class Action():
         self.last_score = 0
         self.game = game          
         self.screen_action = pygame.image.load('screen_action1.png').convert_alpha()
+        self.red_task_button = pygame.image.load('img/red_task.png').convert_alpha()
+        self.orange_task_button = pygame.image.load('img/orange_task.png').convert_alpha()
+        self.yellow_task_button = pygame.image.load('img/yellow_task.png').convert_alpha()
+        self.green_task_button = pygame.image.load('img/green_task.png').convert_alpha()
+        self.blue_task_button = pygame.image.load('img/blue_task.png').convert_alpha()
+        self.gray_task_button = pygame.image.load('img/gray_task.png').convert_alpha()
+        self.violet_task_button = pygame.image.load('img/violet_task.png').convert_alpha()
         self.red_button = pygame.image.load('img/red_button.png').convert_alpha()
         self.orange_button = pygame.image.load('img/orange_button.png').convert_alpha()
         self.yellow_button = pygame.image.load('img/yellow_button.png').convert_alpha()
@@ -187,7 +194,7 @@ class Action():
             *speed (float): The speed at which to update the task progress bar. 
 
         Returns:
-            A task object. 
+            The task button rect. 
         """
         if draw and length == self.TASK_LENGTH:
             draw = False
@@ -203,15 +210,38 @@ class Action():
             game.score += value       
 
         value_text_color = black
-        self.task = pygame.draw.rect(self.game.screen, color, [100, y_coord - 25, 95, 50], border_radius=25)
+        
+        task_button = pygame.Surface((75,50))
+        self.task_button_rect = task_button.get_rect(topleft=[110, y_coord-25])
+        if color == red:
+            task_button = self.red_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )
+        elif color == orange:
+            task_button = self.orange_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )           
+        elif color == yellow:
+            task_button = self.yellow_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )             
+        elif color == green:
+            task_button = self.green_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )            
+        elif color == blue:
+            task_button = self.blue_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )    
+        elif color == gray:
+            task_button = self.gray_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )      
+        else:
+            task_button = self.violet_task_button
+            self.game.screen.blit(task_button, self.task_button_rect )      
         pygame.draw.rect(self.game.screen, color, [200, y_coord - 25, self.TASK_LENGTH, 50])
         pygame.draw.rect(self.game.screen, black, [205, y_coord - 20, self.TASK_LENGTH - 10, 40])
         pygame.draw.rect(self.game.screen, color, [200, y_coord - 25, length, 50])
         
         value_text = self.game.font.render("{:.2f}".format(value), True, value_text_color)
-        self.game.screen.blit(value_text, (130, y_coord - 6))
+        self.game.screen.blit(value_text, (130, y_coord - 10))
 
-        return self.task, length, draw
+        return self.task_button_rect, length, draw
 
     def draw_buttons(self, color, x_coord, cost, owned, manager_cost, speed_multiplier):
         """The method to draw the task's action buttons. 
@@ -1397,7 +1427,7 @@ class Game():
                 self.highscores = {}
 
         
-        self.game_state = 'splash'
+        self.game_state = 'action'
         self.action_starting = True
         self.eligible_to_save = False  
 
