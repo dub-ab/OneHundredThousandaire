@@ -41,6 +41,8 @@ black   = (  0,   0,   0) #
 white   = (255, 255, 255) # 
 gold    = (255, 215,   0) # #ffd700
 
+
+
 class Splash():
     """The introductory splash screen for One Hundred Thousandaire
     """
@@ -1378,9 +1380,9 @@ class Game():
         self.fps = 60
         self.game_clock = pygame.time.Clock()  
         self.font = pygame.font.SysFont('Segoe UI Bold', 24)
-        self.background_sound = pygame.mixer.music.load('snd_background_loop.ogg')
-        self.task_click_sound = pygame.mixer.Sound('snd_task_click.wav')
-        self.buy_click_sound = pygame.mixer.Sound('snd_buy_click.ogg')
+        pygame.mixer.music.load('snd/snd_background_loop.ogg')
+        self.task_click_sound = pygame.mixer.Sound('snd/snd_task_click.wav')
+        self.buy_click_sound = pygame.mixer.Sound('snd/snd_buy_click.ogg')
         self.is_running = True
         self.highscores = {}
         self.task_list = []
